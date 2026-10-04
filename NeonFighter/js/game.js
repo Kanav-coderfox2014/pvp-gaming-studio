@@ -1,29 +1,80 @@
+/* =========================================================
+   NEON FIGHTERS
+   UPGRADED GAME ENGINE
+   ========================================================= */
+
 const player = document.getElementById("player");
 const cpu = document.getElementById("cpu");
+const arena = document.getElementById("arena");
 
-const playerHealthBar = document.getElementById("playerHealth");
-const cpuHealthBar = document.getElementById("cpuHealth");
+const playerHealth =
+    document.getElementById("playerHealth");
 
-const playerHealthText = document.getElementById("playerHealthText");
-const cpuHealthText = document.getElementById("cpuHealthText");
+const cpuHealth =
+    document.getElementById("cpuHealth");
 
-const playerWinsText = document.getElementById("playerWins");
-const cpuWinsText = document.getElementById("cpuWins");
+const playerHealthText =
+    document.getElementById("playerHealthText");
 
-const timerText = document.getElementById("timer");
+const cpuHealthText =
+    document.getElementById("cpuHealthText");
 
-const message = document.getElementById("message");
+const playerWinsText =
+    document.getElementById("playerWins");
 
-const actionStatus = document.getElementById("actionStatus");
-const seriesStatus = document.getElementById("seriesStatus");
+const cpuWinsText =
+    document.getElementById("cpuWins");
 
-const playerAction = document.getElementById("playerAction");
-const cpuAction = document.getElementById("cpuAction");
+const roundText =
+    document.getElementById("roundText");
 
-const blockBar = document.getElementById("blockBar");
-const blockStatus = document.getElementById("blockStatus");
+const timerText =
+    document.getElementById("timer");
 
-const restartButton = document.getElementById("restartButton");
+const comboText =
+    document.getElementById("comboText");
+
+const actionText =
+    document.getElementById("actionText");
+
+const hitEffect =
+    document.getElementById("hitEffect");
+
+const blockBar =
+    document.getElementById("playerBlockBar");
+
+const blockStatus =
+    document.getElementById("playerBlockStatus");
+
+const startButton =
+    document.getElementById("startButton");
+
+const restartButton =
+    document.getElementById("restartButton");
+
+const playAgainButton =
+    document.getElementById("playAgainButton");
+
+const resultOverlay =
+    document.getElementById("resultOverlay");
+
+const resultTitle =
+    document.getElementById("resultTitle");
+
+const resultScore =
+    document.getElementById("resultScore");
+
+const resultMessage =
+    document.getElementById("resultMessage");
+
+const roundPopup =
+    document.getElementById("roundPopup");
+
+const roundPopupText =
+    document.getElementById("roundPopupText");
+
+const difficultyButtons =
+    document.querySelectorAll(".difficulty-btn");
 
 const matchBoxes = [
     document.getElementById("match1"),
@@ -32,861 +83,407 @@ const matchBoxes = [
 ];
 
 
-/* =========================
-   GAME VARIABLES
-========================= */
+/* =========================================================
+   SETTINGS
+   ========================================================= */
 
-let playerHealth = 100;
-let cpuHealth = 100;
+const ARENA_WIDTH = 1050;
+
+const PLAYER_WIDTH = 82;
+const CPU_WIDTH = 82;
+
+const PUNCH_RANGE = 145;
+const KICK_RANGE = 175;
+
+const PUNCH_DAMAGE = 8;
+const KICK_DAMAGE = 13;
+
+const CPU_PUNCH_DAMAGE = 7;
+const CPU_KICK_DAMAGE = 11;
+
+const GRAVITY = 0.8;
+
+const BLOCK_TIME = 5000;
+const BLOCK_COOLDOWN = 10000;
+
+
+/* =========================================================
+   DIFFICULTY
+   ========================================================= */
+
+const difficultySettings = {
+
+    easy: {
+        speed: 1.7,
+        reaction: 450,
+        attackChance: .30,
+        blockChance: .08,
+        dodgeChance: .03,
+        mistakeChance: .35,
+        punchCooldown: 1000,
+        kickCooldown: 1400
+    },
+
+    medium: {
+        speed: 2.5,
+        reaction: 230,
+        attackChance: .58,
+        blockChance: .25,
+        dodgeChance: .10,
+        mistakeChance: .15,
+        punchCooldown: 700,
+        kickCooldown: 1050
+    },
+
+    hard: {
+        speed: 3.4,
+        reaction: 75,
+        attackChance: .80,
+        blockChance: .52,
+        dodgeChance: .22,
+        mistakeChance: .04,
+        punchCooldown: 500,
+        kickCooldown: 800
+    }
+
+};
+
+let difficulty = "easy";
+
+
+/* =========================================================
+   STATE
+   ========================================================= */
+
+let gameRunning = false;
+let roundEnding = false;
+
+let currentRound = 1;
 
 let playerWins = 0;
 let cpuWins = 0;
 
-let currentMatch = 1;
+let playerHP = 100;
+let cpuHP = 100;
 
-let playerX = 18;
-let cpuX = 74;
+let playerX = 130;
+let cpuX = 820;
 
 let playerY = 0;
 let cpuY = 0;
 
 let playerVelocityY = 0;
-let cpuVelocityY = 0;
+
+let timer = 60;
 
 let keys = {};
 
-let gameRunning = true;
-let matchOver = false;
+let gameLoop = null;
+let timerLoop = null;
 
-let timeLeft = 60;
-let timerInterval;
+let playerAttacking = false;
+let cpuAttacking = false;
 
-
-/* =========================
-   ATTACK COOLDOWNS
-========================= */
-
-let playerAttackCooldown = 0;
-let cpuAttackCooldown = 0;
-
-
-/* =========================
-   PLAYER BLOCK SYSTEM
-========================= */
-
-/*
-    Block:
-    - Maximum active time = 5 seconds
-    - Cooldown = 10 seconds
-*/
-
-const BLOCK_DURATION = 5;
-const BLOCK_COOLDOWN = 10;
+let playerAttackCooldown = false;
+let cpuAttackCooldown = false;
 
 let playerBlocking = false;
 
-let blockTimeLeft = 0;
-let blockCooldownLeft = 0;
+let blockStart = 0;
+let blockCooldownStart = 0;
 
-let blockTimer = null;
-let blockCooldownTimer = null;
+let lastCPUDecision = 0;
 
+let combo = 0;
+let comboTimer = null;
 
-/* =========================
-   CPU BLOCK SYSTEM
-========================= */
-
-let cpuBlocking = false;
-let cpuBlockTimer = null;
+let dashCooldown = false;
 
 
-/* =========================
-   KEYBOARD
-========================= */
+/* =========================================================
+   SOUND
+   ========================================================= */
 
-document.addEventListener("keydown", function(event) {
+let audioContext = null;
 
-    keys[event.key.toLowerCase()] = true;
+function sound(frequency, duration, type = "square") {
 
-    if (
-        event.key === " " ||
-        event.key === "ArrowUp" ||
-        event.key === "ArrowDown" ||
-        event.key === "ArrowLeft" ||
-        event.key === "ArrowRight"
-    ) {
-        event.preventDefault();
-    }
+    try {
 
-    if (!gameRunning || matchOver) {
-        return;
-    }
+        if (!audioContext) {
 
-    /* PUNCH */
+            audioContext =
+                new (window.AudioContext ||
+                window.webkitAudioContext)();
 
-    if (event.key === " ") {
-        playerAttack("punch");
-    }
-
-    /* KICK */
-
-    if (event.key.toLowerCase() === "f") {
-        playerAttack("kick");
-    }
-
-    /* BLOCK */
-
-    if (event.key.toLowerCase() === "d") {
-
-        /*
-            Only activate if block is READY.
-            Holding D will NOT restart the timer.
-        */
-
-        if (!playerBlocking && blockCooldownLeft <= 0) {
-            startPlayerBlock();
-        }
-    }
-
-    /* JUMP */
-
-    if (
-        event.key === "ArrowUp" &&
-        playerY === 0
-    ) {
-        playerVelocityY = 13;
-    }
-
-});
-
-
-document.addEventListener("keyup", function(event) {
-
-    keys[event.key.toLowerCase()] = false;
-
-    /*
-        Important:
-        Releasing D does NOT immediately cancel block.
-
-        Block always lasts up to 5 seconds.
-    */
-
-});
-
-
-/* =========================
-   PLAYER BLOCK
-========================= */
-
-function startPlayerBlock() {
-
-    if (!gameRunning || matchOver) {
-        return;
-    }
-
-    if (playerBlocking) {
-        return;
-    }
-
-    if (blockCooldownLeft > 0) {
-        return;
-    }
-
-    playerBlocking = true;
-
-    blockTimeLeft = BLOCK_DURATION;
-
-    player.classList.add("blocking");
-
-    actionStatus.textContent = "BLOCK ACTIVE";
-
-    blockStatus.className = "block-status active";
-
-    updateBlockUI();
-
-    clearInterval(blockTimer);
-
-    blockTimer = setInterval(() => {
-
-        blockTimeLeft--;
-
-        updateBlockUI();
-
-        if (blockTimeLeft <= 0) {
-
-            stopPlayerBlock();
-
-            startBlockCooldown();
         }
 
-    }, 1000);
+        const oscillator =
+            audioContext.createOscillator();
+
+        const gain =
+            audioContext.createGain();
+
+        oscillator.type = type;
+
+        oscillator.frequency.value =
+            frequency;
+
+        gain.gain.setValueAtTime(
+            .08,
+            audioContext.currentTime
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+            .001,
+            audioContext.currentTime + duration
+        );
+
+        oscillator.connect(gain);
+
+        gain.connect(audioContext.destination);
+
+        oscillator.start();
+
+        oscillator.stop(
+            audioContext.currentTime + duration
+        );
+
+    } catch (error) {
+        // Audio is optional.
+    }
+
 }
 
 
-/* =========================
-   STOP PLAYER BLOCK
-========================= */
+/* =========================================================
+   DIFFICULTY
+   ========================================================= */
 
-function stopPlayerBlock() {
+difficultyButtons.forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        difficultyButtons.forEach(b => {
+            b.classList.remove("selected");
+        });
+
+        button.classList.add("selected");
+
+        difficulty = button.dataset.level;
+
+        showAction(
+            difficulty.toUpperCase() + " MODE"
+        );
+
+        sound(500, .06);
+
+    });
+
+});
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+startButton.addEventListener("click", () => {
+
+    startSeries();
+
+});
+
+restartButton.addEventListener("click", () => {
+
+    resultOverlay.classList.add("hidden");
+
+    startSeries();
+
+});
+
+playAgainButton.addEventListener("click", () => {
+
+    resultOverlay.classList.add("hidden");
+
+    startSeries();
+
+});
+
+
+/* =========================================================
+   START SERIES
+   ========================================================= */
+
+function startSeries() {
+
+    clearLoops();
+
+    gameRunning = true;
+
+    roundEnding = false;
+
+    currentRound = 1;
+
+    playerWins = 0;
+    cpuWins = 0;
+
+    playerWinsText.textContent = "0";
+    cpuWinsText.textContent = "0";
+
+    resetMatchHistory();
+
+    startRound();
+
+}
+
+
+/* =========================================================
+   START ROUND
+   ========================================================= */
+
+function startRound() {
+
+    clearLoops();
+
+    roundEnding = false;
+
+    playerHP = 100;
+    cpuHP = 100;
+
+    playerX = 130;
+    cpuX = 820;
+
+    playerY = 0;
+    cpuY = 0;
+
+    playerVelocityY = 0;
+
+    timer = 60;
+
+    playerAttacking = false;
+    cpuAttacking = false;
+
+    playerAttackCooldown = false;
+    cpuAttackCooldown = false;
 
     playerBlocking = false;
 
-    player.classList.remove("blocking");
+    blockStart = 0;
+    blockCooldownStart = 0;
 
-    clearInterval(blockTimer);
+    combo = 0;
 
-    blockTimer = null;
-
-    blockTimeLeft = 0;
-
-    updateBlockUI();
-
-    if (gameRunning && !matchOver) {
-        actionStatus.textContent = "READY";
-    }
-}
-
-
-/* =========================
-   BLOCK COOLDOWN
-========================= */
-
-function startBlockCooldown() {
-
-    blockCooldownLeft = BLOCK_COOLDOWN;
-
-    blockStatus.className = "block-status cooldown";
-
-    updateBlockUI();
-
-    clearInterval(blockCooldownTimer);
-
-    blockCooldownTimer = setInterval(() => {
-
-        blockCooldownLeft--;
-
-        updateBlockUI();
-
-        if (blockCooldownLeft <= 0) {
-
-            clearInterval(blockCooldownTimer);
-
-            blockCooldownTimer = null;
-
-            blockCooldownLeft = 0;
-
-            updateBlockUI();
-
-            if (gameRunning && !matchOver) {
-                actionStatus.textContent = "READY";
-            }
-        }
-
-    }, 1000);
-}
-
-
-/* =========================
-   BLOCK UI
-========================= */
-
-function updateBlockUI() {
-
-    if (playerBlocking) {
-
-        const percentage =
-            (blockTimeLeft / BLOCK_DURATION) * 100;
-
-        blockBar.style.width =
-            Math.max(0, percentage) + "%";
-
-        blockStatus.textContent =
-            "ACTIVE — " + blockTimeLeft + "s";
-
-        return;
-    }
-
-    if (blockCooldownLeft > 0) {
-
-        /*
-            Cooldown starts at 10 seconds.
-            Bar slowly fills as cooldown finishes.
-        */
-
-        const percentage =
-            ((BLOCK_COOLDOWN - blockCooldownLeft) /
-            BLOCK_COOLDOWN) * 100;
-
-        blockBar.style.width =
-            Math.max(0, percentage) + "%";
-
-        blockStatus.textContent =
-            "COOLDOWN — " +
-            blockCooldownLeft +
-            "s";
-
-        return;
-    }
-
-    blockBar.style.width = "100%";
-
-    blockStatus.textContent =
-        "READY — PRESS D";
-
-    blockStatus.className =
-        "block-status ready";
-}
-
-
-/* =========================
-   PLAYER ATTACK
-========================= */
-
-function playerAttack(type) {
-
-    if (!gameRunning || matchOver) {
-        return;
-    }
-
-    if (playerAttackCooldown > 0) {
-        return;
-    }
-
-    /*
-        Attacking while blocking cancels block.
-    */
-
-    if (playerBlocking) {
-
-        stopPlayerBlock();
-
-        startBlockCooldown();
-    }
-
-
-    if (type === "punch") {
-
-        playerAttackCooldown = 18;
-
-        player.classList.remove("punching");
-
-        void player.offsetWidth;
-
-        player.classList.add("punching");
-
-        showAction(
-            playerAction,
-            "PUNCH!",
-            "#00eaff"
-        );
-
-        actionStatus.textContent =
-            "PUNCH ATTACK";
-
-        /*
-            Punch has a limited range.
-        */
-
-        checkPlayerAttack(
-            8,
-            8.5,
-            "PUNCH"
-        );
-    }
-
-
-    if (type === "kick") {
-
-        playerAttackCooldown = 28;
-
-        player.classList.remove("kicking");
-
-        void player.offsetWidth;
-
-        player.classList.add("kicking");
-
-        showAction(
-            playerAction,
-            "KICK!",
-            "#ffe600"
-        );
-
-        actionStatus.textContent =
-            "KICK ATTACK";
-
-        /*
-            Kick has a slightly longer range.
-        */
-
-        checkPlayerAttack(
-            12,
-            10.5,
-            "KICK"
-        );
-    }
-
-
-    setTimeout(() => {
-
-        player.classList.remove(
-            "punching",
-            "kicking"
-        );
-
-        if (
-            !playerBlocking &&
-            gameRunning &&
-            !matchOver
-        ) {
-            actionStatus.textContent =
-                "READY";
-        }
-
-    }, 300);
-}
-
-
-/* =========================
-   PLAYER ATTACK HIT CHECK
-========================= */
-
-function checkPlayerAttack(
-    damage,
-    range,
-    attackName
-) {
-
-    /*
-        IMPORTANT:
-        Attack only lands if fighters
-        are actually close enough.
-
-        A punch from across the arena
-        cannot damage the CPU.
-    */
-
-    const distance = Math.abs(
-        playerX - cpuX
-    );
-
-
-    if (distance > range) {
-
-        showAction(
-            playerAction,
-            "MISS!",
-            "#888"
-        );
-
-        actionStatus.textContent =
-            attackName + " MISSED";
-
-        return;
-    }
-
-
-    /*
-        CPU is blocking.
-    */
-
-    if (cpuBlocking) {
-
-        const blockedDamage =
-            Math.ceil(damage * 0.25);
-
-        cpuHealth -= blockedDamage;
-
-        if (cpuHealth < 0) {
-            cpuHealth = 0;
-        }
-
-        showAction(
-            cpuAction,
-            "BLOCKED!",
-            "#38aaff"
-        );
-
-        updateHealth();
-
-        return;
-    }
-
-
-    /*
-        Successful hit.
-    */
-
-    cpuHealth -= damage;
-
-    if (cpuHealth < 0) {
-        cpuHealth = 0;
-    }
-
-    showAction(
-        cpuAction,
-        "-" + damage,
-        "#ff3b5c"
-    );
-
-    cpu.classList.add("hit");
-
-    setTimeout(() => {
-
-        cpu.classList.remove("hit");
-
-    }, 200);
+    comboText.textContent = "";
 
     updateHealth();
 
-    /*
-        CPU may intelligently move away
-        after getting hit.
-    */
+    updateBlock();
 
-    if (cpuHealth > 0) {
+    updatePositions();
 
-        if (Math.random() < 0.6) {
+    roundText.textContent =
+        `ROUND ${currentRound} / 3`;
 
-            if (cpuX > playerX) {
-                cpuX += 3;
-            } else {
-                cpuX -= 3;
-            }
+    timerText.textContent = "60";
 
-            cpuX = Math.max(
-                5,
-                Math.min(88, cpuX)
-            );
-        }
-    }
+    announceRound();
 
+    gameLoop =
+        setInterval(gameUpdate, 16);
 
-    if (cpuHealth <= 0) {
-
-        endMatch("PLAYER");
-    }
-}
-
-
-/* =========================
-   CPU AI
-========================= */
-
-function cpuThink() {
-
-    if (!gameRunning || matchOver) {
-        return;
-    }
-
-    const distance =
-        Math.abs(playerX - cpuX);
-
-
-    /*
-        CPU keeps a reasonable fighting distance.
-    */
-
-    if (distance > 11) {
-
-        if (playerX > cpuX) {
-            cpuX += 0.28;
-        } else {
-            cpuX -= 0.28;
-        }
-
-        return;
-    }
-
-
-    /*
-        CPU is close enough.
-
-        Sometimes it moves away instead
-        of attacking.
-    */
-
-    if (Math.random() < 0.15) {
-
-        if (cpuX > playerX) {
-            cpuX += 1.2;
-        } else {
-            cpuX -= 1.2;
-        }
-
-        return;
-    }
-
-
-    /*
-        CPU blocks if the player is
-        attacking or very close.
-    */
-
-    if (
-        distance < 9 &&
-        !cpuBlocking &&
-        Math.random() < 0.22
-    ) {
-
-        startCPUBlock();
-
-        return;
-    }
-
-
-    /*
-        CPU attacks.
-    */
-
-    if (
-        distance <= 10.5 &&
-        cpuAttackCooldown <= 0
-    ) {
-
-        cpuAttack();
-    }
+    timerLoop =
+        setInterval(updateTimer, 1000);
 
 }
 
 
-/* =========================
-   CPU ATTACK
-========================= */
+/* =========================================================
+   ROUND ANNOUNCEMENT
+   ========================================================= */
 
-function cpuAttack() {
+function announceRound() {
 
-    if (!gameRunning || matchOver) {
-        return;
-    }
+    roundPopupText.textContent =
+        `ROUND ${currentRound}`;
 
-    if (cpuAttackCooldown > 0) {
-        return;
-    }
+    roundPopup.classList.remove("show");
 
+    void roundPopup.offsetWidth;
 
-    const distance =
-        Math.abs(playerX - cpuX);
+    roundPopup.classList.add("show");
 
+    sound(300, .1);
 
-    /*
-        Double-check range.
-
-        This prevents CPU attacks from
-        magically landing from far away.
-    */
-
-    if (distance > 10.5) {
-        return;
-    }
-
-
-    const attackType =
-        Math.random() < 0.55
-            ? "punch"
-            : "kick";
-
-
-    if (attackType === "punch") {
-
-        cpuAttackCooldown = 55;
-
-        cpu.classList.add("punching");
-
-        showAction(
-            cpuAction,
-            "PUNCH!",
-            "#ff3b5c"
-        );
-
-        setTimeout(() => {
-
-            cpu.classList.remove("punching");
-
-        }, 250);
-
-        checkCPUAttack(
-            7,
-            8.5
-        );
-
-    } else {
-
-        cpuAttackCooldown = 70;
-
-        cpu.classList.add("kicking");
-
-        showAction(
-            cpuAction,
-            "KICK!",
-            "#ff8c42"
-        );
-
-        setTimeout(() => {
-
-            cpu.classList.remove("kicking");
-
-        }, 300);
-
-        checkCPUAttack(
-            10,
-            10.5
-        );
-    }
 }
 
 
-/* =========================
-   CPU ATTACK CHECK
-========================= */
+/* =========================================================
+   MAIN LOOP
+   ========================================================= */
 
-function checkCPUAttack(
-    damage,
-    range
-) {
+function gameUpdate() {
 
-    const distance =
-        Math.abs(playerX - cpuX);
-
-
-    /*
-        CPU attack misses if player
-        is outside the attack range.
-    */
-
-    if (distance > range) {
-
-        showAction(
-            cpuAction,
-            "MISS!",
-            "#888"
-        );
-
+    if (!gameRunning || roundEnding) {
         return;
     }
 
+    playerMovement();
 
-    /*
-        Player is blocking.
-    */
+    playerJump();
 
-    if (playerBlocking) {
+    cpuAI();
 
-        const blockedDamage =
-            Math.ceil(damage * 0.25);
+    updateBlock();
 
-        playerHealth -= blockedDamage;
+    updatePositions();
 
-        if (playerHealth < 0) {
-            playerHealth = 0;
-        }
-
-        showAction(
-            playerAction,
-            "BLOCKED!",
-            "#38aaff"
-        );
-
-        updateHealth();
-
-        return;
-    }
-
-
-    /*
-        Successful CPU hit.
-    */
-
-    playerHealth -= damage;
-
-    if (playerHealth < 0) {
-        playerHealth = 0;
-    }
-
-    showAction(
-        playerAction,
-        "-" + damage,
-        "#ff3b5c"
-    );
-
-    player.classList.add("hit");
-
-    setTimeout(() => {
-
-        player.classList.remove("hit");
-
-    }, 200);
-
-    updateHealth();
-
-
-    if (playerHealth <= 0) {
-
-        endMatch("CPU");
-    }
 }
 
 
-/* =========================
-   ACTION TEXT
-========================= */
+/* =========================================================
+   PLAYER MOVEMENT
+   ========================================================= */
 
-function showAction(
-    element,
-    text,
-    color
-) {
+function playerMovement() {
 
-    element.textContent = text;
-
-    element.style.color = color;
-
-    element.classList.remove("active");
-
-    void element.offsetWidth;
-
-    element.classList.add("active");
-
-    setTimeout(() => {
-
-        element.classList.remove("active");
-
-    }, 350);
-}
-
-
-/* =========================
-   MOVEMENT
-========================= */
-
-function updateMovement() {
-
-    if (!gameRunning || matchOver) {
+    if (playerAttacking) {
         return;
     }
 
-
-    /*
-        PLAYER MOVEMENT
-    */
-
-    if (keys["arrowleft"]) {
-        playerX -= 0.8;
+    if (keys.ArrowLeft) {
+        playerX -= 5;
     }
 
-    if (keys["arrowright"]) {
-        playerX += 0.8;
+    if (keys.ArrowRight) {
+        playerX += 5;
     }
-
 
     playerX = Math.max(
-        5,
-        Math.min(88, playerX)
+        10,
+        Math.min(
+            ARENA_WIDTH - PLAYER_WIDTH - 10,
+            playerX
+        )
     );
 
+}
 
-    /*
-        PLAYER JUMP
-    */
+
+/* =========================================================
+   JUMP
+   ========================================================= */
+
+function playerJump() {
+
+    if (
+        keys.ArrowUp &&
+        playerY === 0 &&
+        !playerAttacking
+    ) {
+
+        playerVelocityY = 14;
+
+    }
 
     if (
         playerY > 0 ||
@@ -895,257 +492,1054 @@ function updateMovement() {
 
         playerY += playerVelocityY;
 
-        playerVelocityY -= 0.7;
+        playerVelocityY -= GRAVITY;
 
         if (playerY <= 0) {
 
             playerY = 0;
+
             playerVelocityY = 0;
+
         }
+
     }
 
-
-    player.style.left =
-        playerX + "%";
-
-    player.style.bottom =
-        (42 + playerY) + "px";
+}
 
 
-    /*
-        CPU JUMP
-    */
+/* =========================================================
+   DASH
+   ========================================================= */
+
+function dash() {
 
     if (
-        Math.random() < 0.0015 &&
-        cpuY === 0
+        dashCooldown ||
+        !gameRunning ||
+        playerAttacking ||
+        playerBlocking
     ) {
-
-        cpuVelocityY = 11;
-    }
-
-
-    if (
-        cpuY > 0 ||
-        cpuVelocityY > 0
-    ) {
-
-        cpuY += cpuVelocityY;
-
-        cpuVelocityY -= 0.7;
-
-        if (cpuY <= 0) {
-
-            cpuY = 0;
-            cpuVelocityY = 0;
-        }
-    }
-
-
-    cpu.style.bottom =
-        (42 + cpuY) + "px";
-
-
-    /*
-        CPU MOVEMENT IS HANDLED
-        BY cpuThink().
-    */
-
-    cpu.style.left =
-        cpuX + "%";
-}
-
-
-/* =========================
-   HEALTH UI
-========================= */
-
-function updateHealth() {
-
-    playerHealthBar.style.width =
-        playerHealth + "%";
-
-    cpuHealthBar.style.width =
-        cpuHealth + "%";
-
-    playerHealthText.textContent =
-        playerHealth;
-
-    cpuHealthText.textContent =
-        cpuHealth;
-}
-
-
-/* =========================
-   TIMER
-========================= */
-
-function startTimer() {
-
-    clearInterval(timerInterval);
-
-    timeLeft = 60;
-
-    timerText.textContent =
-        timeLeft;
-
-
-    timerInterval = setInterval(() => {
-
-        if (!gameRunning || matchOver) {
-            return;
-        }
-
-        timeLeft--;
-
-        timerText.textContent =
-            timeLeft;
-
-
-        if (timeLeft <= 0) {
-
-            clearInterval(timerInterval);
-
-            /*
-                If time ends, higher health wins.
-            */
-
-            if (playerHealth > cpuHealth) {
-
-                endMatch("PLAYER");
-
-            } else if (cpuHealth > playerHealth) {
-
-                endMatch("CPU");
-
-            } else {
-
-                /*
-                    Exact tie:
-                    CPU gets a very small advantage
-                    so the game cannot get stuck.
-                */
-
-                endMatch("CPU");
-            }
-        }
-
-    }, 1000);
-}
-
-
-/* =========================
-   END MATCH
-========================= */
-
-function endMatch(winner) {
-
-    if (matchOver) {
         return;
     }
 
-    matchOver = true;
+    dashCooldown = true;
 
-    clearInterval(timerInterval);
+    const direction =
+        keys.ArrowLeft ? -1 : 1;
+
+    playerX += direction * 95;
+
+    playerX = Math.max(
+        10,
+        Math.min(
+            ARENA_WIDTH - PLAYER_WIDTH - 10,
+            playerX
+        )
+    );
+
+    player.style.filter =
+        "drop-shadow(0 0 20px white)";
+
+    setTimeout(() => {
+
+        player.style.filter = "";
+
+    }, 100);
+
+    sound(700, .05);
+
+    setTimeout(() => {
+
+        dashCooldown = false;
+
+    }, 900);
+
+}
+
+
+/* =========================================================
+   CPU AI
+   ========================================================= */
+
+function cpuAI() {
+
+    const settings =
+        difficultySettings[difficulty];
+
+    const now = Date.now();
+
+    if (
+        now - lastCPUDecision <
+        settings.reaction
+    ) {
+        return;
+    }
+
+    lastCPUDecision = now;
+
+    const distance =
+        Math.abs(cpuX - playerX);
+
 
     /*
-        Stop player block.
+       HARD MODE REACTION
     */
 
-    if (playerBlocking) {
-        stopPlayerBlock();
+    if (
+        difficulty === "hard" &&
+        playerAttacking &&
+        distance < KICK_RANGE
+    ) {
+
+        const decision =
+            Math.random();
+
+        if (
+            decision <
+            settings.blockChance
+        ) {
+
+            cpuBlock();
+
+            return;
+
+        }
+
+        if (
+            decision <
+            settings.blockChance +
+            settings.dodgeChance
+        ) {
+
+            if (cpuX > playerX) {
+                cpuX += 70;
+            } else {
+                cpuX -= 70;
+            }
+
+            keepCPUInside();
+
+            return;
+
+        }
+
     }
 
 
     /*
-        PLAYER WON ROUND
+       Don't stand directly on top
     */
+
+    if (distance < 85) {
+
+        if (cpuX > playerX) {
+            cpuX += settings.speed * 2;
+        } else {
+            cpuX -= settings.speed * 2;
+        }
+
+        keepCPUInside();
+
+        return;
+
+    }
+
+
+    /*
+       Approach
+    */
+
+    if (
+        distance > PUNCH_RANGE &&
+        !cpuAttacking
+    ) {
+
+        if (cpuX > playerX) {
+            cpuX -= settings.speed;
+        } else {
+            cpuX += settings.speed;
+        }
+
+    }
+
+
+    /*
+       Attack
+    */
+
+    if (
+        distance <= KICK_RANGE &&
+        !cpuAttackCooldown &&
+        !cpuAttacking
+    ) {
+
+        if (
+            Math.random() <
+            settings.attackChance
+        ) {
+
+            if (
+                playerBlocking &&
+                difficulty === "hard"
+            ) {
+
+                if (Math.random() < .5) {
+                    return;
+                }
+
+            }
+
+            if (
+                Math.random() < .55
+            ) {
+
+                cpuPunch();
+
+            } else {
+
+                cpuKick();
+
+            }
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   CPU BLOCK
+   ========================================================= */
+
+function cpuBlock() {
+
+    if (
+        cpuAttacking ||
+        roundEnding
+    ) {
+        return;
+    }
+
+    cpu.classList.add("blocking");
+
+    setTimeout(() => {
+
+        cpu.classList.remove("blocking");
+
+    }, difficulty === "hard" ? 600 : 450);
+
+}
+
+
+/* =========================================================
+   KEEP CPU INSIDE
+   ========================================================= */
+
+function keepCPUInside() {
+
+    cpuX = Math.max(
+        10,
+        Math.min(
+            ARENA_WIDTH - CPU_WIDTH - 10,
+            cpuX
+        )
+    );
+
+}
+
+
+/* =========================================================
+   UPDATE POSITIONS
+   ========================================================= */
+
+function updatePositions() {
+
+    player.style.left =
+        playerX + "px";
+
+    cpu.style.left =
+        cpuX + "px";
+
+    player.style.bottom =
+        (96 + playerY) + "px";
+
+    cpu.style.bottom =
+        (96 + cpuY) + "px";
+
+}
+
+
+/* =========================================================
+   KEYBOARD
+   ========================================================= */
+
+document.addEventListener("keydown", event => {
+
+    if (
+        event.code === "Space" ||
+        event.key.startsWith("Arrow")
+    ) {
+
+        event.preventDefault();
+
+    }
+
+    keys[event.key] = true;
+
+    if (
+        !gameRunning ||
+        roundEnding
+    ) {
+        return;
+    }
+
+    if (event.repeat) {
+        return;
+    }
+
+
+    if (event.code === "Space") {
+        punch();
+    }
+
+
+    if (
+        event.key.toLowerCase() === "f"
+    ) {
+        kick();
+    }
+
+
+    if (
+        event.key.toLowerCase() === "d"
+    ) {
+        startBlock();
+    }
+
+
+    if (event.key === "Shift") {
+        dash();
+    }
+
+});
+
+
+document.addEventListener("keyup", event => {
+
+    keys[event.key] = false;
+
+});
+
+
+/* =========================================================
+   PUNCH
+   ========================================================= */
+
+function punch() {
+
+    if (
+        playerAttacking ||
+        playerAttackCooldown ||
+        playerBlocking ||
+        roundEnding
+    ) {
+        return;
+    }
+
+    playerAttacking = true;
+
+    playerAttackCooldown = true;
+
+    player.classList.add("hit");
+
+    sound(180, .08);
+
+    showAction("PUNCH!");
+
+    const distance =
+        Math.abs(playerX - cpuX);
+
+    const blocked =
+        cpu.classList.contains("blocking");
+
+
+    if (
+        distance <= PUNCH_RANGE &&
+        !blocked
+    ) {
+
+        damageCPU(PUNCH_DAMAGE);
+
+        registerCombo();
+
+        hitAnimation();
+
+        showAction(
+            `PUNCH HIT! -${PUNCH_DAMAGE}`
+        );
+
+    }
+
+    else if (blocked) {
+
+        showAction("BLOCKED!");
+
+        sound(100, .08);
+
+    }
+
+    else {
+
+        showAction("PUNCH MISS!");
+
+    }
+
+
+    setTimeout(() => {
+
+        playerAttacking = false;
+
+    }, 550);
+
+
+    setTimeout(() => {
+
+        playerAttackCooldown = false;
+
+    }, 650);
+
+}
+
+
+/* =========================================================
+   KICK
+   ========================================================= */
+
+function kick() {
+
+    if (
+        playerAttacking ||
+        playerAttackCooldown ||
+        playerBlocking ||
+        roundEnding
+    ) {
+        return;
+    }
+
+    playerAttacking = true;
+
+    playerAttackCooldown = true;
+
+    player.classList.add("hit");
+
+    sound(120, .1);
+
+    showAction("KICK!");
+
+    const distance =
+        Math.abs(playerX - cpuX);
+
+    const blocked =
+        cpu.classList.contains("blocking");
+
+
+    if (
+        distance <= KICK_RANGE &&
+        !blocked
+    ) {
+
+        damageCPU(KICK_DAMAGE);
+
+        registerCombo();
+
+        hitAnimation();
+
+        showAction(
+            `KICK HIT! -${KICK_DAMAGE}`
+        );
+
+    }
+
+    else if (blocked) {
+
+        showAction("BLOCKED!");
+
+    }
+
+    else {
+
+        showAction("KICK MISS!");
+
+    }
+
+
+    setTimeout(() => {
+
+        playerAttacking = false;
+
+    }, 750);
+
+
+    setTimeout(() => {
+
+        playerAttackCooldown = false;
+
+    }, 900);
+
+}
+
+
+/* =========================================================
+   CPU PUNCH
+   ========================================================= */
+
+function cpuPunch() {
+
+    if (
+        cpuAttackCooldown ||
+        cpuAttacking ||
+        roundEnding
+    ) {
+        return;
+    }
+
+    cpuAttacking = true;
+
+    cpuAttackCooldown = true;
+
+    const settings =
+        difficultySettings[difficulty];
+
+    const distance =
+        Math.abs(cpuX - playerX);
+
+
+    if (
+        distance <= PUNCH_RANGE &&
+        !playerBlocking &&
+        Math.random() >
+        settings.mistakeChance
+    ) {
+
+        damagePlayer(CPU_PUNCH_DAMAGE);
+
+        showAction(
+            `CPU PUNCH! -${CPU_PUNCH_DAMAGE}`
+        );
+
+        sound(160, .08);
+
+    }
+
+    else if (playerBlocking) {
+
+        showAction("BLOCKED!");
+
+    }
+
+    else {
+
+        showAction("CPU MISS!");
+
+    }
+
+
+    setTimeout(() => {
+
+        cpuAttacking = false;
+
+    }, 350);
+
+
+    setTimeout(() => {
+
+        cpuAttackCooldown = false;
+
+    }, settings.punchCooldown);
+
+}
+
+
+/* =========================================================
+   CPU KICK
+   ========================================================= */
+
+function cpuKick() {
+
+    if (
+        cpuAttackCooldown ||
+        cpuAttacking ||
+        roundEnding
+    ) {
+        return;
+    }
+
+    cpuAttacking = true;
+
+    cpuAttackCooldown = true;
+
+    const settings =
+        difficultySettings[difficulty];
+
+    const distance =
+        Math.abs(cpuX - playerX);
+
+
+    if (
+        distance <= KICK_RANGE &&
+        !playerBlocking &&
+        Math.random() >
+        settings.mistakeChance
+    ) {
+
+        damagePlayer(CPU_KICK_DAMAGE);
+
+        showAction(
+            `CPU KICK! -${CPU_KICK_DAMAGE}`
+        );
+
+        sound(120, .1);
+
+    }
+
+    else if (playerBlocking) {
+
+        showAction("BLOCKED!");
+
+    }
+
+    else {
+
+        showAction("CPU MISS!");
+
+    }
+
+
+    setTimeout(() => {
+
+        cpuAttacking = false;
+
+    }, 450);
+
+
+    setTimeout(() => {
+
+        cpuAttackCooldown = false;
+
+    }, settings.kickCooldown);
+
+}
+
+
+/* =========================================================
+   DAMAGE CPU
+   ========================================================= */
+
+function damageCPU(amount) {
+
+    if (roundEnding) {
+        return;
+    }
+
+    cpuHP -= amount;
+
+    cpuHP =
+        Math.max(0, cpuHP);
+
+    updateHealth();
+
+    cpu.classList.add("hit");
+
+    setTimeout(() => {
+
+        cpu.classList.remove("hit");
+
+    }, 160);
+
+
+    if (cpuHP <= 0) {
+
+        endRound("PLAYER");
+
+    }
+
+}
+
+
+/* =========================================================
+   DAMAGE PLAYER
+   ========================================================= */
+
+function damagePlayer(amount) {
+
+    if (roundEnding) {
+        return;
+    }
+
+    if (playerBlocking) {
+
+        showAction("BLOCKED!");
+
+        sound(90, .05);
+
+        return;
+
+    }
+
+    playerHP -= amount;
+
+    playerHP =
+        Math.max(0, playerHP);
+
+    updateHealth();
+
+    player.classList.add("hit");
+
+    arena.classList.add("shake");
+
+    setTimeout(() => {
+
+        player.classList.remove("hit");
+
+        arena.classList.remove("shake");
+
+    }, 180);
+
+
+    if (playerHP <= 0) {
+
+        endRound("CPU");
+
+    }
+
+}
+
+
+/* =========================================================
+   HEALTH
+   ========================================================= */
+
+function updateHealth() {
+
+    playerHealth.style.width =
+        playerHP + "%";
+
+    cpuHealth.style.width =
+        cpuHP + "%";
+
+    playerHealthText.textContent =
+        Math.round(playerHP);
+
+    cpuHealthText.textContent =
+        Math.round(cpuHP);
+
+}
+
+
+/* =========================================================
+   COMBO
+   ========================================================= */
+
+function registerCombo() {
+
+    combo++;
+
+    clearTimeout(comboTimer);
+
+    if (combo >= 2) {
+
+        comboText.textContent =
+            `${combo} HIT COMBO`;
+
+    }
+
+    comboTimer = setTimeout(() => {
+
+        combo = 0;
+
+        comboText.textContent = "";
+
+    }, 1400);
+
+}
+
+
+/* =========================================================
+   HIT EFFECT
+   ========================================================= */
+
+function hitAnimation() {
+
+    hitEffect.classList.remove("active");
+
+    void hitEffect.offsetWidth;
+
+    hitEffect.classList.add("active");
+
+    arena.classList.remove("shake");
+
+    void arena.offsetWidth;
+
+    arena.classList.add("shake");
+
+}
+
+
+/* =========================================================
+   BLOCK
+   ========================================================= */
+
+function startBlock() {
+
+    if (
+        playerAttacking ||
+        playerBlocking ||
+        roundEnding
+    ) {
+        return;
+    }
+
+    const now = Date.now();
+
+    if (
+        blockCooldownStart &&
+        now - blockCooldownStart <
+        BLOCK_COOLDOWN
+    ) {
+        return;
+    }
+
+    playerBlocking = true;
+
+    blockStart = now;
+
+    player.classList.add("blocking");
+
+    updateBlock();
+
+}
+
+
+function updateBlock() {
+
+    const now = Date.now();
+
+
+    if (playerBlocking) {
+
+        const elapsed =
+            now - blockStart;
+
+        const remaining =
+            Math.max(
+                0,
+                BLOCK_TIME - elapsed
+            );
+
+        blockBar.style.width =
+            (remaining / BLOCK_TIME * 100)
+            + "%";
+
+        blockStatus.textContent =
+            `BLOCKING ${Math.ceil(
+                remaining / 1000
+            )}s`;
+
+
+        if (remaining <= 0) {
+
+            playerBlocking = false;
+
+            blockCooldownStart = now;
+
+            player.classList.remove(
+                "blocking"
+            );
+
+        }
+
+        return;
+
+    }
+
+
+    if (
+        blockCooldownStart &&
+        now - blockCooldownStart <
+        BLOCK_COOLDOWN
+    ) {
+
+        const remaining =
+            BLOCK_COOLDOWN -
+            (now - blockCooldownStart);
+
+        blockBar.style.width = "0%";
+
+        blockStatus.textContent =
+            `COOLDOWN ${Math.ceil(
+                remaining / 1000
+            )}s`;
+
+        return;
+
+    }
+
+
+    blockBar.style.width = "100%";
+
+    blockStatus.textContent =
+        "BLOCK READY";
+
+}
+
+
+/* =========================================================
+   TIMER
+   ========================================================= */
+
+function updateTimer() {
+
+    if (
+        !gameRunning ||
+        roundEnding
+    ) {
+        return;
+    }
+
+    timer--;
+
+    timer =
+        Math.max(0, timer);
+
+    timerText.textContent =
+        timer;
+
+
+    if (timer <= 10) {
+
+        timerText.style.color =
+            "#ff315c";
+
+    } else {
+
+        timerText.style.color =
+            "#ffe600";
+
+    }
+
+
+    if (timer <= 0) {
+
+        if (playerHP > cpuHP) {
+
+            endRound("PLAYER");
+
+        }
+
+        else if (cpuHP > playerHP) {
+
+            endRound("CPU");
+
+        }
+
+        else {
+
+            endRound("DRAW");
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   END ROUND
+   ========================================================= */
+
+function endRound(winner) {
+
+    if (roundEnding) {
+        return;
+    }
+
+    roundEnding = true;
+
+    clearLoops();
+
 
     if (winner === "PLAYER") {
 
         playerWins++;
 
-        matchBoxes[
-            currentMatch - 1
-        ].classList.remove("active");
-
-        matchBoxes[
-            currentMatch - 1
-        ].classList.add("win");
-
-        matchBoxes[
-            currentMatch - 1
-        ].textContent =
-            "MATCH " +
-            currentMatch +
-            " - WIN";
-
         playerWinsText.textContent =
             playerWins;
 
-        message.textContent =
-            "YOU WIN ROUND " +
-            currentMatch;
+        setMatchResult(
+            currentRound,
+            "WIN"
+        );
 
-        message.style.color =
-            "#20ff88";
+        showAction(
+            "ROUND WON!"
+        );
+
+        sound(700, .12);
 
     }
 
-
-    /*
-        CPU WON ROUND
-    */
-
-    else {
+    else if (winner === "CPU") {
 
         cpuWins++;
-
-        matchBoxes[
-            currentMatch - 1
-        ].classList.remove("active");
-
-        matchBoxes[
-            currentMatch - 1
-        ].classList.add("loss");
-
-        matchBoxes[
-            currentMatch - 1
-        ].textContent =
-            "MATCH " +
-            currentMatch +
-            " - LOSS";
 
         cpuWinsText.textContent =
             cpuWins;
 
-        message.textContent =
-            "CPU WINS ROUND " +
-            currentMatch;
+        setMatchResult(
+            currentRound,
+            "LOSS"
+        );
 
-        message.style.color =
-            "#ff3b5c";
+        showAction(
+            "ROUND LOST!"
+        );
+
+        sound(120, .15);
+
+    }
+
+    else {
+
+        setMatchResult(
+            currentRound,
+            "DRAW"
+        );
+
+        showAction(
+            "DRAW!"
+        );
+
     }
 
 
-    message.classList.add("show");
-
-    seriesStatus.textContent =
-        "Round " +
-        currentMatch +
-        " finished";
-
-
     /*
-        IMPORTANT:
-
-        NEVER END THE SERIES AFTER
-        2 ROUNDS.
-
-        Always continue to Match 3.
+       Always play all 3 rounds.
     */
 
-    if (currentMatch === 3) {
+    if (currentRound < 3) {
+
+        setTimeout(() => {
+
+            currentRound++;
+
+            startRound();
+
+        }, 2000);
+
+    }
+
+    else {
 
         setTimeout(() => {
 
@@ -1153,375 +1547,297 @@ function endMatch(winner) {
 
         }, 1800);
 
-        return;
     }
 
-
-    /*
-        Start next round.
-    */
-
-    setTimeout(() => {
-
-        startNextMatch();
-
-    }, 1800);
 }
 
 
-/* =========================
-   NEXT MATCH
-========================= */
-
-function startNextMatch() {
-
-    currentMatch++;
-
-    playerHealth = 100;
-    cpuHealth = 100;
-
-    playerX = 18;
-    cpuX = 74;
-
-    playerY = 0;
-    cpuY = 0;
-
-    playerVelocityY = 0;
-    cpuVelocityY = 0;
-
-    matchOver = false;
-    gameRunning = true;
-
-    player.classList.remove(
-        "blocking",
-        "punching",
-        "kicking",
-        "hit"
-    );
-
-    cpu.classList.remove(
-        "blocking",
-        "punching",
-        "kicking",
-        "hit"
-    );
-
-    playerBlocking = false;
-    cpuBlocking = false;
-
-    /*
-        Reset block for the new round.
-    */
-
-    clearInterval(blockTimer);
-    clearInterval(blockCooldownTimer);
-    clearInterval(cpuBlockTimer);
-
-    blockTimer = null;
-    blockCooldownTimer = null;
-    cpuBlockTimer = null;
-
-    blockTimeLeft = 0;
-    blockCooldownLeft = 0;
-
-    updateBlockUI();
-
-
-    matchBoxes.forEach(box => {
-
-        box.classList.remove("active");
-
-    });
-
-    matchBoxes[
-        currentMatch - 1
-    ].classList.add("active");
-
-
-    message.classList.remove("show");
-
-    actionStatus.textContent =
-        "READY";
-
-    seriesStatus.textContent =
-        "Match " +
-        currentMatch +
-        " of 3";
-
-
-    updateHealth();
-
-    startTimer();
-}
-
-
-/* =========================
+/* =========================================================
    FINISH SERIES
-========================= */
+   ========================================================= */
 
 function finishSeries() {
 
     gameRunning = false;
-    matchOver = true;
 
-    clearInterval(timerInterval);
+    clearLoops();
 
-    /*
-        PLAYER WON MORE ROUNDS
-    */
+    roundEnding = true;
 
-    if (playerWins > cpuWins) {
 
-        message.textContent =
-            "🏆 SERIES WON!";
+    const playerWon =
+        playerWins > cpuWins;
 
-        message.style.color =
-            "#20ff88";
+    const cpuWon =
+        cpuWins > playerWins;
+
+
+    if (playerWon) {
+
+        resultTitle.textContent =
+            "VICTORY";
+
+        resultTitle.classList.remove(
+            "defeat"
+        );
+
+        resultMessage.textContent =
+            "YOU OWN THE NEON ARENA";
+
+        showConfetti();
+
+        sound(900, .15);
+
+        setTimeout(() => {
+            sound(1200, .2);
+        }, 150);
 
     }
 
-    /*
-        CPU WON MORE ROUNDS
-    */
+    else if (cpuWon) {
 
-    else if (cpuWins > playerWins) {
+        resultTitle.textContent =
+            "DEFEAT";
 
-        message.textContent =
-            "SERIES LOST";
+        resultTitle.classList.add(
+            "defeat"
+        );
 
-        message.style.color =
-            "#ff3b5c";
+        resultMessage.textContent =
+            "THE CPU RULES THIS ROUND";
+
+        sound(100, .25);
 
     }
-
-    /*
-        TIE
-    */
 
     else {
 
-        message.textContent =
-            "SERIES DRAW";
+        resultTitle.textContent =
+            "DRAW";
 
-        message.style.color =
-            "#ffe600";
+        resultTitle.classList.remove(
+            "defeat"
+        );
+
+        resultMessage.textContent =
+            "THE ARENA HAS NO WINNER";
+
     }
 
 
-    message.classList.add("show");
+    resultScore.textContent =
+        `${playerWins} - ${cpuWins}`;
 
-    seriesStatus.textContent =
-        "FINAL SCORE: " +
-        playerWins +
-        " - " +
-        cpuWins;
+
+    resultOverlay.classList.remove(
+        "hidden"
+    );
+
 }
 
 
-/* =========================
-   CPU BLOCK
-========================= */
+/* =========================================================
+   MATCH HISTORY
+   ========================================================= */
 
-function startCPUBlock() {
+function setMatchResult(
+    round,
+    result
+) {
 
-    if (
-        cpuBlocking ||
-        !gameRunning ||
-        matchOver
-    ) {
+    const box =
+        matchBoxes[round - 1];
+
+    if (!box) {
         return;
     }
 
-    cpuBlocking = true;
-
-    cpu.classList.add("blocking");
-
-    showAction(
-        cpuAction,
-        "BLOCK!",
-        "#38aaff"
+    box.classList.remove(
+        "win",
+        "loss"
     );
 
-    clearTimeout(cpuBlockTimer);
 
-    /*
-        CPU blocks for a shorter
-        strategic period.
-    */
+    if (result === "WIN") {
 
-    cpuBlockTimer = setTimeout(() => {
+        box.innerHTML =
+            `<span>${String(round).padStart(2,"0")}</span> WIN`;
 
-        cpuBlocking = false;
+        box.classList.add("win");
 
-        cpu.classList.remove(
-            "blocking"
-        );
+    }
 
-    }, 1200);
+    else if (result === "LOSS") {
+
+        box.innerHTML =
+            `<span>${String(round).padStart(2,"0")}</span> LOSS`;
+
+        box.classList.add("loss");
+
+    }
+
+    else {
+
+        box.innerHTML =
+            `<span>${String(round).padStart(2,"0")}</span> DRAW`;
+
+    }
+
 }
 
 
-/* =========================
-   RESTART SERIES
-========================= */
+/* =========================================================
+   RESET MATCH HISTORY
+   ========================================================= */
 
-restartButton.addEventListener(
-    "click",
-    restartSeries
-);
-
-
-function restartSeries() {
-
-    clearInterval(timerInterval);
-
-    clearInterval(blockTimer);
-
-    clearInterval(blockCooldownTimer);
-
-    clearTimeout(cpuBlockTimer);
-
-
-    playerHealth = 100;
-    cpuHealth = 100;
-
-    playerWins = 0;
-    cpuWins = 0;
-
-    currentMatch = 1;
-
-    playerX = 18;
-    cpuX = 74;
-
-    playerY = 0;
-    cpuY = 0;
-
-    playerVelocityY = 0;
-    cpuVelocityY = 0;
-
-    playerBlocking = false;
-    cpuBlocking = false;
-
-    blockTimeLeft = 0;
-    blockCooldownLeft = 0;
-
-    playerAttackCooldown = 0;
-    cpuAttackCooldown = 0;
-
-    gameRunning = true;
-    matchOver = false;
-
-
-    playerWinsText.textContent =
-        "0";
-
-    cpuWinsText.textContent =
-        "0";
-
+function resetMatchHistory() {
 
     matchBoxes.forEach(
         (box, index) => {
 
             box.classList.remove(
-                "active",
                 "win",
                 "loss"
             );
 
-            box.textContent =
-                "MATCH " +
-                (index + 1);
+            box.innerHTML =
+                `<span>${String(index + 1)
+                    .padStart(2,"0")}</span>`;
+
         }
     );
 
-
-    matchBoxes[0].classList.add(
-        "active"
-    );
+}
 
 
-    player.classList.remove(
-        "blocking",
-        "punching",
-        "kicking",
-        "hit"
-    );
+/* =========================================================
+   ACTION MESSAGE
+   ========================================================= */
 
-    cpu.classList.remove(
-        "blocking",
-        "punching",
-        "kicking",
-        "hit"
-    );
+let actionTimeout;
 
+function showAction(message) {
 
-    message.classList.remove(
+    actionText.textContent =
+        message;
+
+    actionText.classList.add(
         "show"
     );
 
+    clearTimeout(actionTimeout);
 
-    actionStatus.textContent =
-        "READY";
+    actionTimeout =
+        setTimeout(() => {
 
-    seriesStatus.textContent =
-        "Match 1 of 3";
+            actionText.classList.remove(
+                "show"
+            );
 
+        }, 900);
 
-    updateHealth();
-
-    updateBlockUI();
-
-    startTimer();
 }
 
 
-/* =========================
-   MAIN GAME LOOP
-========================= */
+/* =========================================================
+   CONFETTI
+   ========================================================= */
 
-let cpuThinkTimer = 0;
+function showConfetti() {
 
-function gameLoop() {
+    const pieces = 160;
 
-    updateMovement();
+    for (let i = 0; i < pieces; i++) {
+
+        const piece =
+            document.createElement("div");
+
+        piece.className =
+            "confetti";
+
+        piece.style.left =
+            Math.random() * 100 + "vw";
+
+        piece.style.animationDuration =
+            (2 + Math.random() * 3) + "s";
+
+        piece.style.animationDelay =
+            Math.random() * .8 + "s";
+
+        piece.style.transform =
+            `rotate(${Math.random() * 360}deg)`;
+
+        piece.style.background =
+            [
+                "#00eaff",
+                "#ff315c",
+                "#ffe600",
+                "#00ff9d",
+                "#ffffff",
+                "#9d5cff"
+            ][
+                Math.floor(
+                    Math.random() * 6
+                )
+            ];
+
+        document.body.appendChild(piece);
 
 
-    if (playerAttackCooldown > 0) {
-        playerAttackCooldown--;
+        setTimeout(() => {
+
+            piece.remove();
+
+        }, 6000);
+
     }
 
-
-    if (cpuAttackCooldown > 0) {
-        cpuAttackCooldown--;
-    }
-
-
-    /*
-        CPU makes decisions regularly
-        instead of randomly attacking
-        every frame.
-    */
-
-    cpuThinkTimer++;
-
-    if (cpuThinkTimer >= 20) {
-
-        cpuThinkTimer = 0;
-
-        cpuThink();
-    }
-
-
-    requestAnimationFrame(
-        gameLoop
-    );
 }
 
 
-/* =========================
-   START
-========================= */
+/* =========================================================
+   CLEAR LOOPS
+   ========================================================= */
 
-restartSeries();
+function clearLoops() {
 
-gameLoop();
+    if (gameLoop) {
+
+        clearInterval(gameLoop);
+
+        gameLoop = null;
+
+    }
+
+    if (timerLoop) {
+
+        clearInterval(timerLoop);
+
+        timerLoop = null;
+
+    }
+
+}
+
+
+/* =========================================================
+   INITIALIZE
+   ========================================================= */
+
+updateHealth();
+
+updateBlock();
+
+updatePositions();
+
+roundText.textContent =
+    "ROUND 1 / 3";
+
+timerText.textContent =
+    "60";
+
+playerWinsText.textContent =
+    "0";
+
+cpuWinsText.textContent =
+    "0";
