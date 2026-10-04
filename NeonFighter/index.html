@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Fighters</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<div class="game-container">
+
+    <header>
+        <h1>NEON FIGHTERS</h1>
+
+        <div class="series-info">
+            <div class="match-title">BEST OF 3 — ALL 3 ROUNDS</div>
+
+            <div class="match-boxes">
+                <div class="match-box active" id="match1">MATCH 1</div>
+                <div class="match-box" id="match2">MATCH 2</div>
+                <div class="match-box" id="match3">MATCH 3</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- SCORE -->
+    <div class="scoreboard">
+
+        <div class="score-side player-score">
+            <span>PLAYER</span>
+            <strong id="playerWins">0</strong>
+            <small>ROUNDS WON</small>
+        </div>
+
+        <div class="versus">VS</div>
+
+        <div class="score-side cpu-score">
+            <span>CPU</span>
+            <strong id="cpuWins">0</strong>
+            <small>ROUNDS WON</small>
+        </div>
+
+    </div>
+
+    <!-- HEALTH -->
+    <div class="health-area">
+
+        <div class="health-player">
+
+            <div class="name">PLAYER</div>
+
+            <div class="health-bar">
+                <div id="playerHealth" class="health-fill player-health-fill"></div>
+            </div>
+
+            <div id="playerHealthText">100</div>
+
+        </div>
+
+        <div class="timer" id="timer">60</div>
+
+        <div class="health-cpu">
+
+            <div class="name">CPU</div>
+
+            <div class="health-bar">
+                <div id="cpuHealth" class="health-fill cpu-health-fill"></div>
+            </div>
+
+            <div id="cpuHealthText">100</div>
+
+        </div>
+
+    </div>
+
+    <!-- ARENA -->
+    <div id="arena">
+
+        <div id="message" class="message">
+            FIGHT!
+        </div>
+
+        <!-- PLAYER -->
+        <div id="player" class="fighter player">
+
+            <div class="fighter-label">YOU</div>
+
+            <div class="head"></div>
+            <div class="body"></div>
+
+            <div class="arm arm-back"></div>
+            <div class="arm arm-front"></div>
+
+            <div class="leg leg-back"></div>
+            <div class="leg leg-front"></div>
+
+            <div id="playerAction" class="action-effect"></div>
+
+        </div>
+
+        <!-- CPU -->
+        <div id="cpu" class="fighter cpu">
+
+            <div class="fighter-label">CPU</div>
+
+            <div class="head"></div>
+            <div class="body"></div>
+
+            <div class="arm arm-back"></div>
+            <div class="arm arm-front"></div>
+
+            <div class="leg leg-back"></div>
+            <div class="leg leg-front"></div>
+
+            <div id="cpuAction" class="action-effect"></div>
+
+        </div>
+
+    </div>
+
+    <!-- BLOCK STATUS -->
+    <div class="block-panel">
+
+        <div class="block-title">
+            BLOCK
+        </div>
+
+        <div class="block-bar">
+            <div id="blockBar"></div>
+        </div>
+
+        <div id="blockStatus" class="block-status ready">
+            READY — PRESS D
+        </div>
+
+    </div>
+
+    <!-- CONTROLS -->
+    <div class="controls">
+
+        <div class="control-group">
+
+            <h3>MOVEMENT</h3>
+
+            <div class="keys">
+                <span>←</span>
+                <span>→</span>
+                <span>↑</span>
+            </div>
+
+            <p>Move / Jump</p>
+
+        </div>
+
+        <div class="control-group">
+
+            <h3>ATTACK</h3>
+
+            <div class="keys">
+                <span>SPACE</span>
+                <span>F</span>
+            </div>
+
+            <p>Punch / Kick</p>
+
+        </div>
+
+        <div class="control-group">
+
+            <h3>DEFENSE</h3>
+
+            <div class="keys">
+                <span>D</span>
+            </div>
+
+            <p>Block — 5 sec</p>
+
+        </div>
+
+    </div>
+
+    <!-- STATUS -->
+    <div class="status-panel">
+
+        <div id="actionStatus">
+            READY
+        </div>
+
+        <div id="seriesStatus">
+            Match 1 of 3
+        </div>
+
+    </div>
+
+    <button id="restartButton">
+        RESTART SERIES
+    </button>
+
+</div>
+
+<script src="js/game.js"></script>
+
+</body>
+</html>
