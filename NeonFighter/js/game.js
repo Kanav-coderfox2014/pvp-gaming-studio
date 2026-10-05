@@ -1,6 +1,11 @@
 /* =========================================================
    NEON FIGHTERS
-   Complete game.js
+   COMPLETE GAME.JS
+   ========================================================= */
+
+
+/* =========================================================
+   ELEMENTS
    ========================================================= */
 
 const arena = document.getElementById("arena");
@@ -8,63 +13,78 @@ const arena = document.getElementById("arena");
 const playerEl = document.getElementById("player");
 const cpuEl = document.getElementById("cpu");
 
-const playerHealthEl = document.getElementById("playerHealth");
-const cpuHealthEl = document.getElementById("cpuHealth");
+const playerHealthEl =
+    document.getElementById("playerHealth");
 
-const playerHealthText = document.getElementById("playerHealthText");
-const cpuHealthText = document.getElementById("cpuHealthText");
+const cpuHealthEl =
+    document.getElementById("cpuHealth");
 
-const timerEl = document.getElementById("timer");
+const playerHealthText =
+    document.getElementById("playerHealthText");
 
-const playerScoreEl = document.getElementById("playerScore");
-const cpuScoreEl = document.getElementById("cpuScore");
+const cpuHealthText =
+    document.getElementById("cpuHealthText");
 
-const startBtn = document.getElementById("startBtn");
-const restartBtn = document.getElementById("restartBtn");
-const fullscreenBtn = document.getElementById("fullscreenBtn");
+const timerEl =
+    document.getElementById("timer");
 
-const easyBtn = document.getElementById("easyBtn");
-const mediumBtn = document.getElementById("mediumBtn");
-const hardBtn = document.getElementById("hardBtn");
+const playerScoreEl =
+    document.getElementById("playerScore");
 
-const resultOverlay = document.getElementById("resultOverlay");
-const resultTitle = document.getElementById("resultTitle");
-const resultScore = document.getElementById("resultScore");
-const resultMessage = document.getElementById("resultMessage");
-const playAgainBtn = document.getElementById("playAgainBtn");
+const cpuScoreEl =
+    document.getElementById("cpuScore");
 
-const confetti = document.getElementById("confetti");
-const blockIndicator = document.getElementById("blockIndicator");
-const hitEffect = document.getElementById("hitEffect");
+const startBtn =
+    document.getElementById("startBtn");
+
+const restartBtn =
+    document.getElementById("restartBtn");
+
+const fullscreenBtn =
+    document.getElementById("fullscreenBtn");
+
+const easyBtn =
+    document.getElementById("easyBtn");
+
+const mediumBtn =
+    document.getElementById("mediumBtn");
+
+const hardBtn =
+    document.getElementById("hardBtn");
+
+const resultOverlay =
+    document.getElementById("resultOverlay");
+
+const resultTitle =
+    document.getElementById("resultTitle");
+
+const resultScore =
+    document.getElementById("resultScore");
+
+const resultMessage =
+    document.getElementById("resultMessage");
+
+const playAgainBtn =
+    document.getElementById("playAgainBtn");
+
+const confetti =
+    document.getElementById("confetti");
+
+const blockIndicator =
+    document.getElementById("blockIndicator");
+
+const hitEffect =
+    document.getElementById("hitEffect");
 
 
 /* =========================================================
-   IMPORTANT:
-   Move fullscreen-related elements INSIDE the arena.
-   This makes them visible when the arena enters fullscreen.
+   SETTINGS
    ========================================================= */
-
-if (blockIndicator && !arena.contains(blockIndicator)) {
-    arena.appendChild(blockIndicator);
-}
-
-if (resultOverlay && !arena.contains(resultOverlay)) {
-    arena.appendChild(resultOverlay);
-}
-
-
-/* =========================================================
-   GAME SETTINGS
-   ========================================================= */
-
-const ARENA_WIDTH = 1100;
-
-const FIGHTER_WIDTH = 55;
-const FIGHTER_HEIGHT = 110;
 
 const FLOOR_Y = 70;
 
 const GRAVITY = -0.72;
+
 const JUMP_POWER = 15;
 
 const MOVE_SPEED = 4;
@@ -76,11 +96,12 @@ const BLOCK_DURATION = 3000;
 const ATTACK_COOLDOWN = 430;
 
 const PLAYER_PUNCH_DAMAGE = 10;
+
 const PLAYER_KICK_DAMAGE = 14;
 
 
 /* =========================================================
-   GAME STATE
+   GAME VARIABLES
    ========================================================= */
 
 let difficulty = "easy";
@@ -96,6 +117,7 @@ let roundTime = ROUND_TIME;
 let currentRound = 1;
 
 let playerWins = 0;
+
 let cpuWins = 0;
 
 let roundFinished = false;
@@ -107,35 +129,30 @@ let platforms = [];
 let blockTimer = 0;
 
 let playerAttackTimer = 0;
+
 let cpuAttackTimer = 0;
-
-let playerAttackType = null;
-let cpuAttackType = null;
-
-let playerAttackEnd = 0;
-let cpuAttackEnd = 0;
-
-let playerMessageTimer = 0;
-let cpuMessageTimer = 0;
 
 
 /* =========================================================
    FIGHTERS
-   y = distance from bottom of arena
    ========================================================= */
 
 const player = {
+
     x: 220,
+
     y: FLOOR_Y,
 
-    width: FIGHTER_WIDTH,
-    height: FIGHTER_HEIGHT,
+    width: 55,
+
+    height: 110,
 
     vy: 0,
 
     health: 100,
 
     grounded: true,
+
     platform: null,
 
     facing: 1,
@@ -147,17 +164,21 @@ const player = {
 
 
 const cpu = {
+
     x: 820,
+
     y: FLOOR_Y,
 
-    width: FIGHTER_WIDTH,
-    height: FIGHTER_HEIGHT,
+    width: 55,
+
+    height: 110,
 
     vy: 0,
 
     health: 100,
 
     grounded: true,
+
     platform: null,
 
     facing: -1,
@@ -169,14 +190,17 @@ const cpu = {
 
 
 /* =========================================================
-   PLATFORM CREATION
+   PLATFORM SETUP
    ========================================================= */
 
 function createPlatforms() {
 
-    const width = arena.clientWidth || ARENA_WIDTH;
+    const width =
+        arena.clientWidth || 1100;
 
-    const scale = width / ARENA_WIDTH;
+    const scale =
+        width / 1100;
+
 
     platforms = [
 
@@ -193,7 +217,9 @@ function createPlatforms() {
         {
             name: "rightLow",
 
-            x: width * 0.92 - (180 * scale),
+            x:
+                width * 0.92 -
+                180 * scale,
 
             width: 180 * scale,
 
@@ -203,7 +229,9 @@ function createPlatforms() {
         {
             name: "center",
 
-            x: width * 0.5 - (190 * scale) / 2,
+            x:
+                width * 0.5 -
+                95 * scale,
 
             width: 190 * scale,
 
@@ -223,7 +251,9 @@ function createPlatforms() {
         {
             name: "rightHigh",
 
-            x: width * 0.82 - (165 * scale),
+            x:
+                width * 0.82 -
+                165 * scale,
 
             width: 165 * scale,
 
@@ -241,6 +271,7 @@ function createPlatforms() {
 function resetFighters() {
 
     player.x = 220;
+
     player.y = FLOOR_Y;
 
     player.vy = 0;
@@ -258,7 +289,12 @@ function resetFighters() {
     player.attacking = false;
 
 
-    cpu.x = 820;
+    cpu.x =
+        Math.max(
+            arena.clientWidth - 280,
+            400
+        );
+
     cpu.y = FLOOR_Y;
 
     cpu.vy = 0;
@@ -276,16 +312,11 @@ function resetFighters() {
     cpu.attacking = false;
 
 
-    playerAttackTimer = 0;
-    cpuAttackTimer = 0;
-
-    playerAttackType = null;
-    cpuAttackType = null;
-
-    playerMessageTimer = 0;
-    cpuMessageTimer = 0;
-
     blockTimer = 0;
+
+    playerAttackTimer = 0;
+
+    cpuAttackTimer = 0;
 }
 
 
@@ -296,46 +327,51 @@ function resetFighters() {
 function updateHealth() {
 
     playerHealthEl.style.width =
-        Math.max(0, player.health) + "%";
+        Math.max(
+            0,
+            player.health
+        ) + "%";
+
 
     cpuHealthEl.style.width =
-        Math.max(0, cpu.health) + "%";
+        Math.max(
+            0,
+            cpu.health
+        ) + "%";
 
 
-    if (playerHealthText) {
-        playerHealthText.textContent =
-            Math.max(0, Math.round(player.health));
-    }
+    playerHealthText.textContent =
+        Math.round(
+            Math.max(0, player.health)
+        );
 
-    if (cpuHealthText) {
-        cpuHealthText.textContent =
-            Math.max(0, Math.round(cpu.health));
-    }
+
+    cpuHealthText.textContent =
+        Math.round(
+            Math.max(0, cpu.health)
+        );
 }
 
 
 function updateScore() {
 
-    if (playerScoreEl) {
-        playerScoreEl.textContent = playerWins;
-    }
+    playerScoreEl.textContent =
+        playerWins;
 
-    if (cpuScoreEl) {
-        cpuScoreEl.textContent = cpuWins;
-    }
+    cpuScoreEl.textContent =
+        cpuWins;
 }
 
 
 function updateTimer() {
 
-    if (timerEl) {
-
-        const seconds =
-            Math.max(0, Math.ceil(roundTime));
-
-        timerEl.textContent =
-            String(seconds).padStart(2, "0");
-    }
+    timerEl.textContent =
+        String(
+            Math.max(
+                0,
+                Math.ceil(roundTime)
+            )
+        ).padStart(2, "0");
 }
 
 
@@ -347,30 +383,50 @@ function setDifficulty(level) {
 
     difficulty = level;
 
-    easyBtn?.classList.toggle("active", level === "easy");
-    mediumBtn?.classList.toggle("active", level === "medium");
-    hardBtn?.classList.toggle("active", level === "hard");
+
+    easyBtn.classList.toggle(
+        "active",
+        level === "easy"
+    );
+
+
+    mediumBtn.classList.toggle(
+        "active",
+        level === "medium"
+    );
+
+
+    hardBtn.classList.toggle(
+        "active",
+        level === "hard"
+    );
+
 
     /*
-       Changing difficulty automatically restarts
-       the complete match.
+       Changing difficulty automatically
+       starts a completely new match.
     */
 
     startGame();
 }
 
 
-easyBtn?.addEventListener("click", () => {
-    setDifficulty("easy");
-});
+easyBtn.addEventListener(
+    "click",
+    () => setDifficulty("easy")
+);
 
-mediumBtn?.addEventListener("click", () => {
-    setDifficulty("medium");
-});
 
-hardBtn?.addEventListener("click", () => {
-    setDifficulty("hard");
-});
+mediumBtn.addEventListener(
+    "click",
+    () => setDifficulty("medium")
+);
+
+
+hardBtn.addEventListener(
+    "click",
+    () => setDifficulty("hard")
+);
 
 
 /* =========================================================
@@ -409,137 +465,23 @@ function getCpuDamage() {
    POSITION HELPERS
    ========================================================= */
 
+function getCenter(fighter) {
+
+    return fighter.x +
+        fighter.width / 2;
+}
+
+
 function getLeft(fighter) {
+
     return fighter.x;
 }
 
 
 function getRight(fighter) {
-    return fighter.x + fighter.width;
-}
 
-
-function getCenter(fighter) {
-    return fighter.x + fighter.width / 2;
-}
-
-
-/*
-   Returns the platform currently underneath a fighter.
-   This is used AFTER movement to determine whether
-   the fighter has walked off a platform.
-*/
-
-function getSupportingPlatform(fighter) {
-
-    const center = getCenter(fighter);
-
-    for (const platform of platforms) {
-
-        if (
-            center >= platform.x &&
-            center <= platform.x + platform.width &&
-            Math.abs(fighter.y - platform.supportY) < 2
-        ) {
-            return platform;
-        }
-    }
-
-    return null;
-}
-
-
-/* =========================================================
-   PLATFORM LANDING
-   ========================================================= */
-
-/*
-   THIS IS THE IMPORTANT FIX.
-
-   A fighter lands only when:
-
-   1. They were above the platform.
-   2. They are moving downward.
-   3. Their feet cross the platform height.
-   4. Their horizontal body overlaps the platform.
-
-   When this happens, we SNAP their y position
-   exactly onto the platform.
-
-   This prevents the CPU from floating.
-*/
-
-function findLandingPlatform(fighter, previousY, nextY) {
-
-    /*
-       Don't allow landing while going upward.
-    */
-
-    if (fighter.vy > 0) {
-        return null;
-    }
-
-
-    /*
-       Check the floor separately.
-    */
-
-    if (
-        previousY >= FLOOR_Y &&
-        nextY <= FLOOR_Y
-    ) {
-
-        fighter.y = FLOOR_Y;
-
-        return "floor";
-    }
-
-
-    /*
-       Check every aerial platform.
-    */
-
-    for (const platform of platforms) {
-
-        const overlapsHorizontally =
-            getRight(fighter) > platform.x &&
-            getLeft(fighter) <
-            platform.x + platform.width;
-
-
-        if (!overlapsHorizontally) {
-            continue;
-        }
-
-
-        /*
-           The fighter must be above the platform
-           before falling through it.
-        */
-
-        if (
-            previousY >= platform.supportY &&
-            nextY <= platform.supportY
-        ) {
-
-            /*
-               SNAP TO PLATFORM
-            */
-
-            fighter.y = platform.supportY;
-
-            fighter.vy = 0;
-
-            fighter.grounded = true;
-
-            fighter.platform = platform;
-
-            return platform;
-        }
-    }
-
-
-    return null;
+    return fighter.x +
+        fighter.width;
 }
 
 
@@ -549,11 +491,16 @@ function findLandingPlatform(fighter, previousY, nextY) {
 
 function updatePhysics(fighter) {
 
-    const previousY = fighter.y;
+    /*
+       Save the position before gravity.
+    */
+
+    const previousY =
+        fighter.y;
 
 
     /*
-       Apply gravity if airborne.
+       Apply gravity when airborne.
     */
 
     if (!fighter.grounded) {
@@ -565,105 +512,136 @@ function updatePhysics(fighter) {
 
 
     /*
-       If the fighter is standing on a platform,
-       make sure they haven't walked off it.
+       If standing on a platform,
+       keep the feet EXACTLY on it.
     */
 
-    if (fighter.grounded) {
+    if (fighter.grounded &&
+        fighter.platform) {
 
-        if (fighter.platform) {
-
-            const p = fighter.platform;
-
-            const horizontalOverlap =
-                getRight(fighter) > p.x &&
-                getLeft(fighter) < p.x + p.width;
+        const p =
+            fighter.platform;
 
 
-            /*
-               If the fighter walks completely off
-               the platform, they start falling.
-            */
+        const overlaps =
+            getRight(fighter) > p.x &&
+            getLeft(fighter) <
+                p.x + p.width;
 
-            if (!horizontalOverlap) {
 
-                fighter.grounded = false;
+        if (overlaps) {
 
-                fighter.platform = null;
-            }
-
-            else {
-
-                /*
-                   IMPORTANT:
-                   Keep feet exactly on the platform.
-                   This stops floating/sinking.
-                */
-
-                fighter.y = p.supportY;
-
-                fighter.vy = 0;
-            }
-        }
-
-        else {
-
-            /*
-               Fighter is standing on the floor.
-            */
-
-            fighter.y = FLOOR_Y;
+            fighter.y =
+                p.supportY;
 
             fighter.vy = 0;
+
+        } else {
+
+            /*
+               Walked off platform.
+            */
+
+            fighter.grounded = false;
+
+            fighter.platform = null;
         }
     }
 
 
     /*
-       If airborne, check for landing.
+       Find landing while falling.
     */
 
     if (!fighter.grounded) {
 
-        const nextY = fighter.y;
+        /*
+           Floor landing.
+        */
 
-        const landing =
-            findLandingPlatform(
-                fighter,
-                previousY,
-                nextY
-            );
+        if (
+            fighter.vy <= 0 &&
+            previousY >= FLOOR_Y &&
+            fighter.y <= FLOOR_Y
+        ) {
 
+            fighter.y = FLOOR_Y;
 
-        if (landing === "floor") {
+            fighter.vy = 0;
 
             fighter.grounded = true;
 
             fighter.platform = null;
 
-            fighter.vy = 0;
-
-            fighter.y = FLOOR_Y;
-        }
-
-        else if (landing) {
+        } else {
 
             /*
-               findLandingPlatform already snapped
-               the fighter to the platform.
+               Check aerial platforms.
             */
 
-            fighter.grounded = true;
+            for (
+                const platform of platforms
+            ) {
 
-            fighter.vy = 0;
+                const horizontalOverlap =
+                    getRight(fighter) >
+                        platform.x &&
+                    getLeft(fighter) <
+                        platform.x +
+                        platform.width;
 
-            fighter.platform = landing;
+
+                if (!horizontalOverlap) {
+                    continue;
+                }
+
+
+                /*
+                   The fighter must be moving DOWN.
+                */
+
+                if (fighter.vy <= 0) {
+
+                    /*
+                       Check whether the feet
+                       crossed the platform.
+                    */
+
+                    if (
+                        previousY >=
+                            platform.supportY &&
+                        fighter.y <=
+                            platform.supportY
+                    ) {
+
+                        /*
+                           THIS IS THE FIX.
+
+                           Snap directly onto
+                           the platform.
+                        */
+
+                        fighter.y =
+                            platform.supportY;
+
+                        fighter.vy = 0;
+
+                        fighter.grounded =
+                            true;
+
+                        fighter.platform =
+                            platform;
+
+                        break;
+                    }
+                }
+            }
         }
     }
 
 
     /*
-       Safety floor.
+       Safety check.
     */
 
     if (fighter.y < FLOOR_Y) {
@@ -680,7 +658,7 @@ function updatePhysics(fighter) {
 
 
 /* =========================================================
-   MOVEMENT
+   PLAYER MOVEMENT
    ========================================================= */
 
 function movePlayer() {
@@ -690,16 +668,11 @@ function movePlayer() {
     }
 
 
-    let moving = false;
-
-
     if (keys["ArrowLeft"]) {
 
         player.x -= MOVE_SPEED;
 
         player.facing = -1;
-
-        moving = true;
     }
 
 
@@ -708,121 +681,27 @@ function movePlayer() {
         player.x += MOVE_SPEED;
 
         player.facing = 1;
-
-        moving = true;
     }
 
 
     /*
-       Keep player inside arena.
+       Keep inside arena.
     */
 
-    player.x = Math.max(
-        0,
-        Math.min(
-            arena.clientWidth - player.width,
-            player.x
-        )
-    );
-
-
-    /*
-       Jump.
-    */
-
-    if (
-        keys["ArrowUp"] &&
-        player.grounded
-    ) {
-
-        player.vy = JUMP_POWER;
-
-        player.grounded = false;
-
-        player.platform = null;
-
-        keys["ArrowUp"] = false;
-    }
-
-
-    /*
-       Block.
-    */
-
-    if (
-        keys["d"] ||
-        keys["D"]
-    ) {
-
-        if (!player.attacking) {
-
-            startBlock();
-        }
-    }
+    player.x =
+        Math.max(
+            0,
+            Math.min(
+                arena.clientWidth -
+                    player.width,
+                player.x
+            )
+        );
 }
 
 
 /* =========================================================
-   BLOCK
-   ========================================================= */
-
-function startBlock() {
-
-    if (blockTimer > 0) {
-        return;
-    }
-
-
-    player.blocking = true;
-
-    blockTimer = BLOCK_DURATION;
-
-
-    if (blockIndicator) {
-
-        blockIndicator.classList.add("show");
-    }
-}
-
-
-function updateBlock(delta) {
-
-    if (blockTimer > 0) {
-
-        blockTimer -= delta;
-
-        player.blocking = true;
-
-
-        if (blockIndicator) {
-
-            const seconds =
-                Math.ceil(blockTimer / 1000);
-
-            blockIndicator.textContent =
-                Math.max(1, seconds);
-
-            blockIndicator.classList.add("show");
-        }
-
-
-        if (blockTimer <= 0) {
-
-            blockTimer = 0;
-
-            player.blocking = false;
-
-            if (blockIndicator) {
-
-                blockIndicator.classList.remove("show");
-            }
-        }
-    }
-}
-
-
-/* =========================================================
-   JUMP PLAYER
+   PLAYER JUMP
    ========================================================= */
 
 function playerJump() {
@@ -832,42 +711,52 @@ function playerJump() {
         player.grounded
     ) {
 
-        player.vy = JUMP_POWER;
+        player.vy =
+            JUMP_POWER;
 
-        player.grounded = false;
+        player.grounded =
+            false;
 
-        player.platform = null;
+        player.platform =
+            null;
     }
 }
 
 
 /* =========================================================
-   CPU PLATFORM AI
+   CPU PLATFORM DETECTION
    ========================================================= */
 
-function getPlatformUnderFighter(fighter) {
-
-    /*
-       Floor.
-    */
+function getPlatformUnderFighter(
+    fighter
+) {
 
     if (
-        Math.abs(fighter.y - FLOOR_Y) < 3
+        Math.abs(
+            fighter.y - FLOOR_Y
+        ) < 3
     ) {
+
         return null;
     }
 
 
-    for (const platform of platforms) {
+    for (
+        const platform of platforms
+    ) {
 
-        const center = getCenter(fighter);
+        const center =
+            getCenter(fighter);
 
 
         if (
             center >= platform.x &&
-            center <= platform.x + platform.width &&
+            center <=
+                platform.x +
+                platform.width &&
             Math.abs(
-                fighter.y - platform.supportY
+                fighter.y -
+                platform.supportY
             ) < 3
         ) {
 
@@ -880,38 +769,37 @@ function getPlatformUnderFighter(fighter) {
 }
 
 
-/*
-   Find the platform where the player is currently standing.
-*/
-
 function getPlayerPlatform() {
 
     if (!player.grounded) {
         return null;
     }
 
-    return getPlatformUnderFighter(player);
+
+    return getPlatformUnderFighter(
+        player
+    );
 }
 
 
-/*
-   CPU tries to reach the same platform as the player.
-*/
+/* =========================================================
+   CPU PLATFORM AI
+   ========================================================= */
 
 function cpuTryReachPlayerPlatform() {
 
-    const targetPlatform =
+    const target =
         getPlayerPlatform();
 
 
-    if (!targetPlatform) {
+    if (!target) {
         return false;
     }
 
 
     const targetCenter =
-        targetPlatform.x +
-        targetPlatform.width / 2;
+        target.x +
+        target.width / 2;
 
 
     const cpuCenter =
@@ -919,14 +807,17 @@ function cpuTryReachPlayerPlatform() {
 
 
     const difference =
-        targetCenter - cpuCenter;
+        targetCenter -
+        cpuCenter;
 
 
     /*
-       Move toward the target platform.
+       Move toward platform.
     */
 
-    if (Math.abs(difference) > 18) {
+    if (
+        Math.abs(difference) > 20
+    ) {
 
         if (difference > 0) {
 
@@ -934,8 +825,7 @@ function cpuTryReachPlayerPlatform() {
 
             cpu.facing = 1;
 
-        }
-        else {
+        } else {
 
             cpu.x -= getCpuSpeed();
 
@@ -945,28 +835,29 @@ function cpuTryReachPlayerPlatform() {
 
 
     /*
-       If the target platform is above the CPU,
-       jump when we're reasonably underneath it.
+       Jump toward higher platform.
     */
 
     if (
         cpu.grounded &&
-        targetPlatform.supportY > cpu.y + 5
+        target.supportY >
+            cpu.y + 5
     ) {
 
-        const horizontallyNear =
+        if (
             Math.abs(
-                cpuCenter - targetCenter
-            ) < 150;
+                difference
+            ) < 180
+        ) {
 
+            cpu.vy =
+                JUMP_POWER;
 
-        if (horizontallyNear) {
+            cpu.grounded =
+                false;
 
-            cpu.vy = JUMP_POWER;
-
-            cpu.grounded = false;
-
-            cpu.platform = null;
+            cpu.platform =
+                null;
         }
     }
 
@@ -986,47 +877,41 @@ function updateCPU() {
     }
 
 
-    const cpuSpeed =
-        getCpuSpeed();
-
-
-    const horizontalDistance =
+    const distance =
         getCenter(player) -
         getCenter(cpu);
 
 
     const absoluteDistance =
-        Math.abs(horizontalDistance);
+        Math.abs(distance);
 
 
-    /*
-       First priority:
-       try to reach player's platform.
-    */
-
-    const reachedPlatform =
+    const platformTarget =
         cpuTryReachPlayerPlatform();
 
 
     /*
-       If player is not on an aerial platform,
-       follow normally.
+       If there isn't a target platform,
+       follow the player.
     */
 
-    if (!reachedPlatform) {
+    if (!platformTarget) {
 
-        if (absoluteDistance > 80) {
+        if (
+            absoluteDistance > 75
+        ) {
 
-            if (horizontalDistance > 0) {
+            if (distance > 0) {
 
-                cpu.x += cpuSpeed;
+                cpu.x +=
+                    getCpuSpeed();
 
                 cpu.facing = 1;
-            }
 
-            else {
+            } else {
 
-                cpu.x -= cpuSpeed;
+                cpu.x -=
+                    getCpuSpeed();
 
                 cpu.facing = -1;
             }
@@ -1035,47 +920,44 @@ function updateCPU() {
 
 
     /*
-       CPU can jump toward the player
-       when player is above.
+       Jump if player is above.
     */
 
     if (
         cpu.grounded &&
-        player.y > cpu.y + 35
+        player.y >
+            cpu.y + 35 &&
+        absoluteDistance < 280
     ) {
 
-        const closeEnough =
-            absoluteDistance < 260;
+        cpu.vy =
+            JUMP_POWER;
 
+        cpu.grounded =
+            false;
 
-        if (closeEnough) {
-
-            cpu.vy = JUMP_POWER;
-
-            cpu.grounded = false;
-
-            cpu.platform = null;
-        }
+        cpu.platform =
+            null;
     }
 
 
     /*
-       While airborne, keep steering toward
-       the player's platform/player.
+       Air control.
     */
 
     if (!cpu.grounded) {
 
-        if (horizontalDistance > 10) {
+        if (distance > 10) {
 
-            cpu.x += cpuSpeed * 0.75;
+            cpu.x +=
+                getCpuSpeed() * 0.75;
 
             cpu.facing = 1;
-        }
 
-        else if (horizontalDistance < -10) {
+        } else if (distance < -10) {
 
-            cpu.x -= cpuSpeed * 0.75;
+            cpu.x -=
+                getCpuSpeed() * 0.75;
 
             cpu.facing = -1;
         }
@@ -1083,25 +965,29 @@ function updateCPU() {
 
 
     /*
-       Keep CPU inside arena.
+       Stay inside arena.
     */
 
-    cpu.x = Math.max(
-        0,
-        Math.min(
-            arena.clientWidth - cpu.width,
-            cpu.x
-        )
-    );
+    cpu.x =
+        Math.max(
+            0,
+            Math.min(
+                arena.clientWidth -
+                    cpu.width,
+                cpu.x
+            )
+        );
 
 
     /*
-       CPU attacks only when close enough.
+       Attack only when close.
     */
 
     if (
         absoluteDistance < 78 &&
-        Math.abs(player.y - cpu.y) < 70
+        Math.abs(
+            player.y - cpu.y
+        ) < 70
     ) {
 
         cpuAttack();
@@ -1132,72 +1018,52 @@ function getBodyBox(fighter) {
 }
 
 
-/*
-   Returns the actual arm/leg attack area.
-
-   This means attacks cannot magically hit from
-   across the screen.
-*/
-
 function getAttackHitbox(
     fighter,
-    attackType
+    type
 ) {
 
-    const facing =
-        fighter.facing;
+    const center =
+        getCenter(fighter);
 
 
-    const bodyCenter =
-        fighter.x +
-        fighter.width / 2;
+    /*
+       PUNCH
+    */
 
+    if (type === "punch") {
 
-    if (attackType === "punch") {
-
-        const armWidth = 42;
-        const armHeight = 24;
-
-
-        if (facing === 1) {
+        if (fighter.facing === 1) {
 
             return {
 
-                left:
-                    bodyCenter + 5,
+                left: center + 3,
 
                 right:
-                    bodyCenter +
-                    5 +
-                    armWidth,
+                    center + 45,
 
                 bottom:
-                    fighter.y + 57,
+                    fighter.y + 55,
 
                 top:
-                    fighter.y + 57 +
-                    armHeight
+                    fighter.y + 82
             };
-        }
 
-        else {
+        } else {
 
             return {
 
                 left:
-                    bodyCenter -
-                    5 -
-                    armWidth,
+                    center - 45,
 
                 right:
-                    bodyCenter - 5,
+                    center - 3,
 
                 bottom:
-                    fighter.y + 57,
+                    fighter.y + 55,
 
                 top:
-                    fighter.y + 57 +
-                    armHeight
+                    fighter.y + 82
             };
         }
     }
@@ -1207,49 +1073,38 @@ function getAttackHitbox(
        KICK
     */
 
-    const legWidth = 48;
-    const legHeight = 30;
-
-
-    if (facing === 1) {
+    if (fighter.facing === 1) {
 
         return {
 
             left:
-                bodyCenter + 5,
+                center + 3,
 
             right:
-                bodyCenter +
-                5 +
-                legWidth,
+                center + 50,
 
             bottom:
                 fighter.y + 5,
 
             top:
-                fighter.y + 5 +
-                legHeight
+                fighter.y + 38
         };
-    }
 
-    else {
+    } else {
 
         return {
 
             left:
-                bodyCenter -
-                5 -
-                legWidth,
+                center - 50,
 
             right:
-                bodyCenter - 5,
+                center - 3,
 
             bottom:
                 fighter.y + 5,
 
             top:
-                fighter.y + 5 +
-                legHeight
+                fighter.y + 38
         };
     }
 }
@@ -1260,11 +1115,8 @@ function boxesTouch(a, b) {
     return (
 
         a.left < b.right &&
-
         a.right > b.left &&
-
         a.bottom < b.top &&
-
         a.top > b.bottom
     );
 }
@@ -1291,13 +1143,8 @@ function playerAttack(type) {
     }
 
 
-    playerAttackType = type;
-
     playerAttackTimer =
         ATTACK_COOLDOWN;
-
-    playerAttackEnd =
-        performance.now() + 220;
 
 
     player.attacking = true;
@@ -1308,22 +1155,22 @@ function playerAttack(type) {
         "kick"
     );
 
-    playerEl.classList.add(type);
+
+    playerEl.classList.add(
+        type
+    );
 
 
     setTimeout(() => {
 
-        playerEl.classList.remove(type);
+        playerEl.classList.remove(
+            type
+        );
 
         player.attacking = false;
 
     }, 220);
 
-
-    /*
-       Check the hit slightly after
-       the attack begins.
-    */
 
     setTimeout(() => {
 
@@ -1343,21 +1190,27 @@ function playerAttack(type) {
             getBodyBox(cpu);
 
 
-        if (boxesTouch(
-            attackBox,
-            targetBox
-        )) {
+        if (
+            boxesTouch(
+                attackBox,
+                targetBox
+            )
+        ) {
 
-            const damage =
-                type === "kick"
-                    ? PLAYER_KICK_DAMAGE
-                    : PLAYER_PUNCH_DAMAGE;
+            if (type === "kick") {
 
+                damageCPU(
+                    PLAYER_KICK_DAMAGE
+                );
 
-            damageCPU(damage);
+            } else {
 
-        }
-        else {
+                damageCPU(
+                    PLAYER_PUNCH_DAMAGE
+                );
+            }
+
+        } else {
 
             showMiss();
         }
@@ -1382,27 +1235,16 @@ function cpuAttack() {
     }
 
 
-    if (cpu.blocking) {
-        return;
-    }
-
-
     const type =
         Math.random() < 0.55
             ? "punch"
             : "kick";
 
 
-    cpuAttackType = type;
-
     cpuAttackTimer =
         difficulty === "hard"
             ? 430
             : 600;
-
-
-    cpuAttackEnd =
-        performance.now() + 220;
 
 
     cpu.attacking = true;
@@ -1413,12 +1255,17 @@ function cpuAttack() {
         "kick"
     );
 
-    cpuEl.classList.add(type);
+
+    cpuEl.classList.add(
+        type
+    );
 
 
     setTimeout(() => {
 
-        cpuEl.classList.remove(type);
+        cpuEl.classList.remove(
+            type
+        );
 
         cpu.attacking = false;
 
@@ -1443,15 +1290,16 @@ function cpuAttack() {
             getBodyBox(player);
 
 
-        if (boxesTouch(
-            attackBox,
-            targetBox
-        )) {
+        if (
+            boxesTouch(
+                attackBox,
+                targetBox
+            )
+        ) {
 
             damagePlayer(
                 getCpuDamage()
             );
-
         }
 
     }, 100);
@@ -1475,17 +1323,18 @@ function damagePlayer(amount) {
 
     if (player.blocking) {
 
-        amount *= 0.33;
-
         amount =
             Math.max(
                 1,
-                Math.round(amount)
+                Math.round(
+                    amount * 0.33
+                )
             );
     }
 
 
     player.health -= amount;
+
 
     player.health =
         Math.max(
@@ -1496,18 +1345,18 @@ function damagePlayer(amount) {
 
     updateHealth();
 
+
     showHitEffect(
-        player,
-        "#00eaff"
+        player
     );
 
 
     /*
-       Small knockback.
+       Knockback.
     */
 
     player.x +=
-        cpu.facing * 16;
+        cpu.facing * 15;
 
 
     player.x =
@@ -1515,13 +1364,15 @@ function damagePlayer(amount) {
             0,
             Math.min(
                 arena.clientWidth -
-                player.width,
+                    player.width,
                 player.x
             )
         );
 
 
-    if (player.health <= 0) {
+    if (
+        player.health <= 0
+    ) {
 
         endRound("cpu");
     }
@@ -1537,6 +1388,7 @@ function damageCPU(amount) {
 
     cpu.health -= amount;
 
+
     cpu.health =
         Math.max(
             0,
@@ -1546,14 +1398,14 @@ function damageCPU(amount) {
 
     updateHealth();
 
+
     showHitEffect(
-        cpu,
-        "#ff335f"
+        cpu
     );
 
 
     cpu.x +=
-        player.facing * 16;
+        player.facing * 15;
 
 
     cpu.x =
@@ -1561,44 +1413,18 @@ function damageCPU(amount) {
             0,
             Math.min(
                 arena.clientWidth -
-                cpu.width,
+                    cpu.width,
                 cpu.x
             )
         );
 
 
-    if (cpu.health <= 0) {
+    if (
+        cpu.health <= 0
+    ) {
 
         endRound("player");
     }
-}
-
-
-/* =========================================================
-   MISS MESSAGE
-   ========================================================= */
-
-function showMiss() {
-
-    if (!hitEffect) {
-        return;
-    }
-
-
-    hitEffect.textContent = "MISS!";
-
-    hitEffect.classList.remove("show");
-
-    void hitEffect.offsetWidth;
-
-    hitEffect.classList.add("show");
-
-
-    setTimeout(() => {
-
-        hitEffect.classList.remove("show");
-
-    }, 450);
 }
 
 
@@ -1607,8 +1433,7 @@ function showMiss() {
    ========================================================= */
 
 function showHitEffect(
-    fighter,
-    textColor
+    fighter
 ) {
 
     if (!hitEffect) {
@@ -1616,30 +1441,155 @@ function showHitEffect(
     }
 
 
-    hitEffect.textContent = "HIT!";
+    hitEffect.textContent =
+        "HIT!";
+
 
     hitEffect.style.left =
-        fighter.x + "px";
+        (
+            fighter.x +
+            fighter.width / 2
+        ) + "px";
+
 
     hitEffect.style.bottom =
-        (fighter.y + 80) + "px";
+        (
+            fighter.y + 90
+        ) + "px";
 
-    hitEffect.style.color =
-        textColor;
 
+    hitEffect.classList.remove(
+        "show"
+    );
 
-    hitEffect.classList.remove("show");
 
     void hitEffect.offsetWidth;
 
-    hitEffect.classList.add("show");
+
+    hitEffect.classList.add(
+        "show"
+    );
 
 
     setTimeout(() => {
 
-        hitEffect.classList.remove("show");
+        hitEffect.classList.remove(
+            "show"
+        );
 
-    }, 350);
+    }, 400);
+}
+
+
+function showMiss() {
+
+    if (!hitEffect) {
+        return;
+    }
+
+
+    hitEffect.textContent =
+        "MISS!";
+
+
+    hitEffect.style.left =
+        "50%";
+
+
+    hitEffect.style.bottom =
+        "250px";
+
+
+    hitEffect.classList.remove(
+        "show"
+    );
+
+
+    void hitEffect.offsetWidth;
+
+
+    hitEffect.classList.add(
+        "show"
+    );
+
+
+    setTimeout(() => {
+
+        hitEffect.classList.remove(
+            "show"
+        );
+
+    }, 400);
+}
+
+
+/* =========================================================
+   BLOCK
+   ========================================================= */
+
+function startBlock() {
+
+    if (blockTimer > 0) {
+        return;
+    }
+
+
+    blockTimer =
+        BLOCK_DURATION;
+
+
+    player.blocking = true;
+
+
+    blockIndicator.classList.add(
+        "show"
+    );
+}
+
+
+function updateBlock(delta) {
+
+    if (blockTimer <= 0) {
+
+        player.blocking = false;
+
+        blockIndicator.classList.remove(
+            "show"
+        );
+
+        return;
+    }
+
+
+    blockTimer -= delta;
+
+
+    player.blocking = true;
+
+
+    const seconds =
+        Math.ceil(
+            blockTimer / 1000
+        );
+
+
+    blockIndicator.textContent =
+        Math.max(
+            1,
+            seconds
+        );
+
+
+    if (blockTimer <= 0) {
+
+        blockTimer = 0;
+
+        player.blocking = false;
+
+        blockIndicator.classList.remove(
+            "show"
+        );
+    }
 }
 
 
@@ -1653,10 +1603,6 @@ document.addEventListener(
 
         keys[event.key] = true;
 
-
-        /*
-           Prevent arrow keys from scrolling.
-        */
 
         if (
             [
@@ -1678,19 +1624,24 @@ document.addEventListener(
 
 
         /*
-           SPACE = punch
+           SPACE = PUNCH
         */
 
-        if (event.code === "Space") {
+        if (
+            event.code ===
+            "Space"
+        ) {
 
             event.preventDefault();
 
-            playerAttack("punch");
+            playerAttack(
+                "punch"
+            );
         }
 
 
         /*
-           F = kick
+           F = KICK
         */
 
         if (
@@ -1698,12 +1649,14 @@ document.addEventListener(
             event.key === "F"
         ) {
 
-            playerAttack("kick");
+            playerAttack(
+                "kick"
+            );
         }
 
 
         /*
-           UP = jump
+           UP = JUMP
         */
 
         if (
@@ -1712,7 +1665,21 @@ document.addEventListener(
 
             playerJump();
 
-            keys["ArrowUp"] = false;
+            keys["ArrowUp"] =
+                false;
+        }
+
+
+        /*
+           D = BLOCK
+        */
+
+        if (
+            event.key === "d" ||
+            event.key === "D"
+        ) {
+
+            startBlock();
         }
     }
 );
@@ -1723,19 +1690,6 @@ document.addEventListener(
     (event) => {
 
         keys[event.key] = false;
-
-
-        if (
-            event.key === "d" ||
-            event.key === "D"
-        ) {
-
-            /*
-               The block continues until its
-               3-second countdown ends.
-            */
-
-        }
     }
 );
 
@@ -1751,10 +1705,13 @@ function updateRoundTimer(delta) {
     }
 
 
-    roundTime -= delta / 1000;
+    roundTime -=
+        delta / 1000;
 
 
-    if (roundTime <= 0) {
+    if (
+        roundTime <= 0
+    ) {
 
         roundTime = 0;
 
@@ -1770,10 +1727,6 @@ function updateRoundTimer(delta) {
 }
 
 
-/* =========================================================
-   ROUND END BY TIME
-   ========================================================= */
-
 function finishRoundByTime() {
 
     if (roundFinished) {
@@ -1781,28 +1734,21 @@ function finishRoundByTime() {
     }
 
 
-    roundFinished = true;
-
-
-    /*
-       IMPORTANT:
-       Timer reaching zero does NOT automatically
-       make the player lose.
-
-       Highest health wins.
-    */
-
-    if (player.health > cpu.health) {
+    if (
+        player.health >
+        cpu.health
+    ) {
 
         endRound("player");
 
-    }
-    else if (cpu.health > player.health) {
+    } else if (
+        cpu.health >
+        player.health
+    ) {
 
         endRound("cpu");
 
-    }
-    else {
+    } else {
 
         endRound("draw");
     }
@@ -1829,8 +1775,9 @@ function endRound(winner) {
 
         playerWins++;
 
-    }
-    else if (winner === "cpu") {
+    } else if (
+        winner === "cpu"
+    ) {
 
         cpuWins++;
     }
@@ -1839,20 +1786,17 @@ function endRound(winner) {
     updateScore();
 
 
-    /*
-       Play all 3 rounds.
-    */
-
     setTimeout(() => {
 
-        if (currentRound < 3) {
+        if (
+            currentRound < 3
+        ) {
 
             currentRound++;
 
             startRound();
 
-        }
-        else {
+        } else {
 
             finishMatch();
         }
@@ -1869,31 +1813,36 @@ function startRound() {
 
     roundFinished = false;
 
-    roundTime = ROUND_TIME;
+    roundTime =
+        ROUND_TIME;
 
-    resetFighters();
 
     createPlatforms();
+
+    resetFighters();
 
     updateHealth();
 
     updateTimer();
+
 
     gameRunning = true;
 }
 
 
 /* =========================================================
-   START COMPLETE MATCH
+   START MATCH
    ========================================================= */
 
 function startGame() {
 
     /*
-       Stop previous loop safely.
+       Cancel previous animation loop.
     */
 
-    if (animationFrame) {
+    if (
+        animationFrame !== null
+    ) {
 
         cancelAnimationFrame(
             animationFrame
@@ -1912,26 +1861,42 @@ function startGame() {
     roundFinished = false;
 
 
-    resultOverlay?.classList.remove("show");
+    /*
+       Make absolutely sure the result
+       popup cannot block buttons.
+    */
+
+    resultOverlay.classList.remove(
+        "show"
+    );
 
 
-    confetti?.replaceChildren();
+    resultOverlay.style.pointerEvents =
+        "none";
+
+
+    confetti.innerHTML = "";
 
 
     updateScore();
+
 
     createPlatforms();
 
     resetFighters();
 
-    updateHealth();
 
-    roundTime = ROUND_TIME;
+    roundTime =
+        ROUND_TIME;
+
+
+    updateHealth();
 
     updateTimer();
 
 
     gameRunning = true;
+
 
     lastTime =
         performance.now();
@@ -1953,61 +1918,55 @@ function finishMatch() {
     gameRunning = false;
 
 
-    if (!resultOverlay) {
-        return;
-    }
+    resultScore.textContent =
+        `${playerWins} - ${cpuWins}`;
 
 
-    resultOverlay.classList.add("show");
+    if (
+        playerWins >
+        cpuWins
+    ) {
+
+        resultTitle.textContent =
+            "YOU WIN!";
 
 
-    if (resultScore) {
+        resultMessage.textContent =
+            "Amazing fighting!";
 
-        resultScore.textContent =
-            `${playerWins} - ${cpuWins}`;
-    }
-
-
-    if (playerWins > cpuWins) {
-
-        if (resultTitle) {
-            resultTitle.textContent =
-                "YOU WIN!";
-        }
-
-        if (resultMessage) {
-            resultMessage.textContent =
-                "Amazing fighting!";
-        }
 
         createConfetti();
 
+    } else if (
+        cpuWins >
+        playerWins
+    ) {
+
+        resultTitle.textContent =
+            "CPU WINS!";
+
+
+        resultMessage.textContent =
+            "Try again and fight smarter!";
+
+    } else {
+
+        resultTitle.textContent =
+            "DRAW!";
+
+
+        resultMessage.textContent =
+            "What a close match!";
     }
-    else if (cpuWins > playerWins) {
 
-        if (resultTitle) {
-            resultTitle.textContent =
-                "CPU WINS!";
-        }
 
-        if (resultMessage) {
-            resultMessage.textContent =
-                "Try again and fight smarter!";
-        }
+    resultOverlay.classList.add(
+        "show"
+    );
 
-    }
-    else {
 
-        if (resultTitle) {
-            resultTitle.textContent =
-                "DRAW!";
-        }
-
-        if (resultMessage) {
-            resultMessage.textContent =
-                "What a close match!";
-        }
-    }
+    resultOverlay.style.pointerEvents =
+        "auto";
 }
 
 
@@ -2017,18 +1976,19 @@ function finishMatch() {
 
 function createConfetti() {
 
-    if (!confetti) {
-        return;
-    }
-
-
     confetti.innerHTML = "";
 
 
-    for (let i = 0; i < 80; i++) {
+    for (
+        let i = 0;
+        i < 80;
+        i++
+    ) {
 
         const piece =
-            document.createElement("span");
+            document.createElement(
+                "span"
+            );
 
 
         piece.className =
@@ -2036,27 +1996,36 @@ function createConfetti() {
 
 
         piece.style.left =
-            Math.random() * 100 + "%";
+            Math.random() *
+            100 +
+            "%";
 
 
         piece.style.animationDelay =
-            Math.random() * 1.5 + "s";
+            Math.random() *
+            1.5 +
+            "s";
 
 
         piece.style.transform =
-            `rotate(${Math.random() * 360}deg)`;
+            `rotate(${
+                Math.random() *
+                360
+            }deg)`;
 
 
-        confetti.appendChild(piece);
+        confetti.appendChild(
+            piece
+        );
     }
 }
 
 
 /* =========================================================
-   PLAY AGAIN
+   BUTTONS
    ========================================================= */
 
-playAgainBtn?.addEventListener(
+startBtn.addEventListener(
     "click",
     () => {
 
@@ -2065,7 +2034,7 @@ playAgainBtn?.addEventListener(
 );
 
 
-startBtn?.addEventListener(
+restartBtn.addEventListener(
     "click",
     () => {
 
@@ -2074,7 +2043,7 @@ startBtn?.addEventListener(
 );
 
 
-restartBtn?.addEventListener(
+playAgainBtn.addEventListener(
     "click",
     () => {
 
@@ -2087,31 +2056,35 @@ restartBtn?.addEventListener(
    FULLSCREEN
    ========================================================= */
 
-fullscreenBtn?.addEventListener(
+fullscreenBtn.addEventListener(
     "click",
     async () => {
 
         try {
 
-            /*
-               Fullscreen the arena itself.
-               Because the result overlay and block indicator
-               were moved inside the arena above, they remain
-               visible in fullscreen.
-            */
+            if (
+                !document.fullscreenElement
+            ) {
 
-            if (!document.fullscreenElement) {
+                /*
+                   FULL PAGE FULLSCREEN.
 
-                await arena.requestFullscreen();
+                   This keeps the popup,
+                   block countdown and buttons
+                   inside the fullscreen page.
+                */
 
+                await document
+                    .documentElement
+                    .requestFullscreen();
+
+            } else {
+
+                await document
+                    .exitFullscreen();
             }
-            else {
 
-                await document.exitFullscreen();
-            }
-
-        }
-        catch (error) {
+        } catch (error) {
 
             console.log(
                 "Fullscreen error:",
@@ -2133,16 +2106,12 @@ window.addEventListener(
         createPlatforms();
 
 
-        /*
-           Keep fighters inside the new arena size.
-        */
-
         player.x =
             Math.max(
                 0,
                 Math.min(
                     arena.clientWidth -
-                    player.width,
+                        player.width,
                     player.x
                 )
             );
@@ -2153,7 +2122,7 @@ window.addEventListener(
                 0,
                 Math.min(
                     arena.clientWidth -
-                    cpu.width,
+                        cpu.width,
                     cpu.x
                 )
             );
@@ -2162,7 +2131,7 @@ window.addEventListener(
 
 
 /* =========================================================
-   UPDATE FIGHTER VISUALS
+   VISUAL UPDATE
    ========================================================= */
 
 function updateFighterVisual(
@@ -2170,63 +2139,46 @@ function updateFighterVisual(
     element
 ) {
 
-    if (!element) {
-        return;
-    }
-
-
     element.style.left =
         fighter.x + "px";
 
-
-    /*
-       y is measured from the bottom.
-    */
 
     element.style.bottom =
         fighter.y + "px";
 
 
     /*
-       Flip character based on facing.
+       Don't use transform for facing here
+       because CSS animations can also use
+       transforms.
+
+       Instead, flip the entire fighter
+       using scaleX.
     */
 
-    if (fighter.facing === -1) {
+    if (
+        fighter.facing === -1
+    ) {
 
         element.style.transform =
             "scaleX(-1)";
 
-    }
-    else {
+    } else {
 
         element.style.transform =
             "scaleX(1)";
     }
 
 
-    /*
-       Blocking class.
-    */
-
     element.classList.toggle(
         "blocking",
         fighter.blocking
-    );
-
-
-    /*
-       Grounded class.
-    */
-
-    element.classList.toggle(
-        "grounded",
-        fighter.grounded
     );
 }
 
 
 /* =========================================================
-   GAME LOOP
+   MAIN GAME LOOP
    ========================================================= */
 
 function gameLoop(timestamp) {
@@ -2234,80 +2186,107 @@ function gameLoop(timestamp) {
     const delta =
         Math.min(
             40,
-            timestamp - lastTime
+            timestamp -
+                lastTime
         );
 
 
-    lastTime = timestamp;
+    lastTime =
+        timestamp;
 
 
     if (gameRunning) {
 
         /*
-           Player movement.
+           PLAYER
         */
 
         movePlayer();
 
 
         /*
-           CPU movement/AI.
+           CPU
         */
 
         updateCPU();
 
 
         /*
-           Physics AFTER movement.
-           This is important because platform
-           detection uses the new x position.
+           PHYSICS
+
+           Movement happens FIRST.
+           Physics happens SECOND.
+
+           This makes platform collision
+           much more reliable.
         */
 
-        updatePhysics(player);
+        updatePhysics(
+            player
+        );
 
-        updatePhysics(cpu);
+
+        updatePhysics(
+            cpu
+        );
 
 
         /*
-           Attack cooldowns.
+           ATTACK COOLDOWNS
         */
 
-        if (playerAttackTimer > 0) {
+        if (
+            playerAttackTimer > 0
+        ) {
 
-            playerAttackTimer -= delta;
+            playerAttackTimer -=
+                delta;
 
-            if (playerAttackTimer < 0) {
+
+            if (
+                playerAttackTimer < 0
+            ) {
+
                 playerAttackTimer = 0;
             }
         }
 
 
-        if (cpuAttackTimer > 0) {
+        if (
+            cpuAttackTimer > 0
+        ) {
 
-            cpuAttackTimer -= delta;
+            cpuAttackTimer -=
+                delta;
 
-            if (cpuAttackTimer < 0) {
+
+            if (
+                cpuAttackTimer < 0
+            ) {
+
                 cpuAttackTimer = 0;
             }
         }
 
 
         /*
-           Block countdown.
+           BLOCK
         */
 
         updateBlock(delta);
 
 
         /*
-           Round timer.
+           TIMER
         */
 
-        updateRoundTimer(delta);
+        updateRoundTimer(
+            delta
+        );
 
 
         /*
-           Update visuals.
+           VISUALS
         */
 
         updateFighterVisual(
@@ -2315,16 +2294,13 @@ function gameLoop(timestamp) {
             playerEl
         );
 
+
         updateFighterVisual(
             cpu,
             cpuEl
         );
     }
 
-
-    /*
-       Keep animation loop alive.
-    */
 
     animationFrame =
         requestAnimationFrame(
@@ -2358,15 +2334,13 @@ updateFighterVisual(
 );
 
 
-/*
-   Default difficulty.
-*/
-
-easyBtn?.classList.add("active");
+easyBtn.classList.add(
+    "active"
+);
 
 
 /*
-   Start the game.
+   Start immediately.
 */
 
 startGame();

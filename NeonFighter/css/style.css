@@ -5,21 +5,15 @@
 }
 
 
-html,
 body {
-    min-height: 100%;
-}
-
-
-body {
-
     min-height: 100vh;
 
     background:
         radial-gradient(
-            circle at 50% 0%,
-            #191934,
-            #050509 70%
+            circle at top,
+            #202044 0%,
+            #101020 45%,
+            #08080f 100%
         );
 
     color: white;
@@ -29,433 +23,360 @@ body {
         Helvetica,
         sans-serif;
 
-    text-align: center;
-
     overflow-x: hidden;
-
 }
 
 
-/* =========================
-   HEADER
-========================= */
+/* =====================================================
+   TOP BAR
+   ===================================================== */
 
-header {
+.topbar {
+    min-height: 90px;
 
-    padding:
-        20px
-        10px
-        10px;
+    padding: 15px 25px;
 
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 20px;
+
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+
+    background:
+        rgba(8,8,20,0.9);
+
+    position: relative;
+
+    z-index: 50;
 }
 
 
-.logo {
-
-    font-size: 34px;
-
-    font-weight: 900;
+.topbar h1 {
+    font-size: 28px;
 
     letter-spacing: 4px;
 
-}
-
-
-.logo span {
-
     color: #00eaff;
 
+    text-shadow:
+        0 0 8px #00eaff,
+        0 0 20px #00eaff;
 }
 
 
-.subtitle {
-
+.topbar p {
     margin-top: 5px;
 
-    font-size: 12px;
-
-    color: #777;
-
-    letter-spacing: 3px;
-
-}
-
-
-/* =========================
-   DIFFICULTY
-========================= */
-
-.difficulty-section {
-
-    margin: 12px auto;
-
-}
-
-
-.difficulty-section h3 {
+    color: #aaa;
 
     font-size: 13px;
 
     letter-spacing: 2px;
-
-    color: #aaa;
-
-    margin-bottom: 8px;
-
 }
 
 
-.difficulty-buttons {
+/* =====================================================
+   DIFFICULTY BUTTONS
+   ===================================================== */
 
+.difficulty {
     display: flex;
-
-    justify-content: center;
 
     gap: 8px;
 
+    position: relative;
+
+    z-index: 100;
 }
 
 
-button {
+.difficulty-btn {
+    border: 1px solid #00eaff;
 
-    border:
-        1px solid
-        #444;
+    background: #11152b;
 
-    background: #11131d;
+    color: #00eaff;
 
-    color: white;
+    padding: 10px 15px;
 
-    padding:
-        10px
-        18px;
-
-    border-radius: 7px;
+    border-radius: 8px;
 
     cursor: pointer;
 
     font-weight: bold;
 
     transition:
-        transform 0.12s,
-        border-color 0.12s,
-        background 0.12s;
+        0.2s ease;
 
+    position: relative;
+
+    z-index: 101;
 }
 
 
-button:hover {
+.difficulty-btn:hover {
+    background: #00eaff;
 
-    transform:
-        translateY(-2px);
+    color: #07101a;
 
-    border-color:
-        #00eaff;
-
-}
-
-
-button:active {
-
-    transform:
-        scale(0.96);
-
+    box-shadow:
+        0 0 15px #00eaff;
 }
 
 
 .difficulty-btn.active {
+    background: #00eaff;
 
-    background:
-        #00eaff;
+    color: #07101a;
 
-    color:
-        #001016;
-
-    border-color:
-        #00eaff;
-
+    box-shadow:
+        0 0 15px #00eaff;
 }
 
 
-/* =========================
+/* =====================================================
    HUD
-========================= */
+   ===================================================== */
 
 .hud {
+    width: min(1100px, 96vw);
 
-    width:
-        min(
-            1000px,
-            94vw
-        );
+    margin: 15px auto;
 
-    margin:
-        12px auto;
-
-    display:
-        grid;
+    display: grid;
 
     grid-template-columns:
         1fr
-        180px
+        150px
         1fr;
 
-    gap: 15px;
+    gap: 20px;
 
     align-items: center;
 
+    position: relative;
+
+    z-index: 30;
 }
 
 
-.fighter-hud {
-
-    font-size: 13px;
-
-    font-weight: bold;
-
+.health-section {
+    position: relative;
 }
 
 
-.fighter-name {
+.hud-label {
+    font-size: 12px;
+
+    letter-spacing: 3px;
 
     margin-bottom: 5px;
-
-    letter-spacing: 2px;
-
 }
 
 
-.health-frame {
+.cpu-hud {
+    text-align: right;
+}
 
-    width: 100%;
 
+.health-bar {
     height: 18px;
 
-    border:
-        2px solid
-        #444;
-
-    background:
-        #080808;
-
-    border-radius: 4px;
+    border-radius: 10px;
 
     overflow: hidden;
 
-    margin-bottom: 5px;
+    background: #171727;
 
+    border: 1px solid rgba(255,255,255,0.2);
+
+    box-shadow:
+        inset 0 0 10px rgba(0,0,0,0.5);
 }
 
 
 .health-fill {
-
     height: 100%;
 
     width: 100%;
 
     transition:
-        width 0.12s linear;
-
+        width 0.15s linear;
 }
 
 
 .player-health {
-
     background:
-        #00eaff;
-
-    box-shadow:
-        0 0 10px
-        rgba(
-            0,
-            234,
-            255,
-            0.5
+        linear-gradient(
+            90deg,
+            #00eaff,
+            #00a8ff
         );
 
+    box-shadow:
+        0 0 15px #00eaff;
 }
 
 
 .cpu-health {
-
     background:
-        #ff315d;
-
-    box-shadow:
-        0 0 10px
-        rgba(
-            255,
-            49,
-            93,
-            0.5
+        linear-gradient(
+            90deg,
+            #ff335f,
+            #ff004c
         );
 
+    box-shadow:
+        0 0 15px #ff335f;
 }
 
 
-.hp-label,
-.round-score {
+.health-number {
+    font-size: 12px;
 
     margin-top: 3px;
 
+    opacity: 0.8;
 }
 
 
-.center-hud {
+.round-info {
+    text-align: center;
+
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        auto
+        auto
+        auto
+        1fr;
+
+    align-items: center;
+
+    gap: 5px;
+}
+
+
+.round-label {
+    grid-column: 1 / -1;
+
+    font-size: 10px;
+
+    letter-spacing: 2px;
+
+    opacity: 0.6;
+}
+
+
+.score {
+    font-size: 22px;
 
     font-weight: bold;
-
 }
 
 
-#roundText {
-
-    font-size: 13px;
-
-    color: #aaa;
-
+.score-dash {
+    opacity: 0.5;
 }
 
 
-#timer {
+.timer {
+    grid-column: 1 / -1;
 
-    font-size: 30px;
+    margin-top: 5px;
 
-    margin:
-        2px
-        0;
+    font-size: 22px;
 
+    color: #fff;
+
+    text-shadow:
+        0 0 10px #fff;
 }
 
 
-#actionText {
-
-    font-size: 12px;
-
-    color:
-        #00eaff;
-
-    min-height: 15px;
-
-}
-
-
-/* =========================
+/* =====================================================
    ARENA
-========================= */
+   ===================================================== */
 
 #arena {
-
-    position: relative;
-
-    width:
-        min(
-            1100px,
-            96vw
-        );
+    width: min(1100px, 96vw);
 
     height: 520px;
 
-    margin:
-        15px auto;
+    margin: 0 auto;
+
+    position: relative;
 
     overflow: hidden;
 
     background:
-        radial-gradient(
-            circle at 50% 30%,
-            #181832,
-            #07070d 70%
+        linear-gradient(
+            180deg,
+            #111126 0%,
+            #0c0c19 70%,
+            #080812 100%
         );
 
     border:
-        2px solid
-        #24243d;
+        2px solid #242449;
 
-    border-radius: 10px;
+    border-radius: 14px;
 
     box-shadow:
-        0 0 30px
-        rgba(
-            0,
-            234,
-            255,
-            0.08
-        );
+        0 0 30px rgba(0,234,255,0.1);
 
+    z-index: 1;
 }
 
 
-#arena:fullscreen {
-
-    width: 100vw;
-
-    height: 100vh;
-
-    margin: 0;
-
-    border: none;
-
-    border-radius: 0;
-
-}
-
-
-/* =========================
+/* =====================================================
    GRID
-========================= */
+   ===================================================== */
 
-.grid {
-
+.arena-grid {
     position: absolute;
 
     inset: 0;
 
+    opacity: 0.2;
+
     background-image:
         linear-gradient(
-            rgba(
-                0,
-                234,
-                255,
-                0.07
-            )
-            1px,
+            rgba(0,234,255,0.2) 1px,
             transparent 1px
         ),
         linear-gradient(
             90deg,
-            rgba(
-                0,
-                234,
-                255,
-                0.07
-            )
-            1px,
+            rgba(0,234,255,0.2) 1px,
             transparent 1px
         );
 
-    background-size:
-        45px
-        45px;
+    background-size: 40px 40px;
 
     transform:
-        perspective(400px)
-        rotateX(55deg);
+        perspective(300px)
+        rotateX(55deg)
+        scale(1.5);
 
     transform-origin:
-        bottom;
+        bottom center;
 
-    opacity: 0.4;
+    pointer-events: none;
 
+    z-index: 0;
 }
 
 
-/* =========================
+/* =====================================================
    FLOOR
-========================= */
+   ===================================================== */
 
 .floor {
-
     position: absolute;
 
     left: 0;
@@ -468,617 +389,564 @@ button:active {
 
     background:
         linear-gradient(
-            to top,
-            #10101c,
-            #19192a
+            180deg,
+            #10172c,
+            #090914
         );
 
     border-top:
-        3px solid
-        #00eaff;
+        4px solid #00eaff;
 
     box-shadow:
-        0 -5px 20px
-        rgba(
-            0,
-            234,
-            255,
-            0.12
-        );
-
-    z-index: 2;
-
-}
-
-
-/* =========================
-   PLATFORMS
-========================= */
-
-.platform {
-
-    position: absolute;
-
-    height: 12px;
-
-    background:
-        linear-gradient(
-            90deg,
-            #10131e,
-            #20263a,
-            #10131e
-        );
-
-    border-top:
-        3px solid
-        #00eaff;
-
-    border-radius: 5px;
-
-    box-shadow:
-        0 0 14px
-        rgba(
-            0,
-            234,
-            255,
-            0.45
-        );
+        0 -5px 20px rgba(0,234,255,0.4);
 
     z-index: 3;
 
+    pointer-events: none;
+}
+
+
+/* =====================================================
+   PLATFORMS
+   ===================================================== */
+
+.platform {
+    position: absolute;
+
+    height: 16px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #111b30,
+            #090914
+        );
+
+    border-top:
+        4px solid #00eaff;
+
+    border-radius:
+        8px 8px 3px 3px;
+
+    box-shadow:
+        0 0 15px rgba(0,234,255,0.7);
+
+    z-index: 4;
+
+    pointer-events: none;
 }
 
 
 .platform-left-low {
-
     width: 180px;
 
     left: 8%;
 
     bottom: 110px;
-
 }
 
 
 .platform-right-low {
-
     width: 180px;
 
     right: 8%;
 
     bottom: 110px;
-
 }
 
 
 .platform-center {
-
     width: 190px;
 
     left: 50%;
 
-    transform:
-        translateX(-50%);
+    transform: translateX(-50%);
 
     bottom: 165px;
-
 }
 
 
 .platform-left-high {
-
     width: 165px;
 
     left: 18%;
 
     bottom: 215px;
-
 }
 
 
 .platform-right-high {
-
     width: 165px;
 
     right: 18%;
 
     bottom: 215px;
-
 }
 
 
-/* =========================
+/* =====================================================
    FIGHTERS
-========================= */
+   ===================================================== */
 
 .fighter {
-
-    position: absolute;
-
     width: 55px;
 
     height: 110px;
 
+    position: absolute;
+
+    bottom: 70px;
+
     z-index: 10;
-
-    transform-origin:
-        center bottom;
-
-    user-select: none;
 
     pointer-events: none;
 
+    transform-origin: center bottom;
+
+    filter:
+        drop-shadow(
+            0 0 12px currentColor
+        );
 }
 
 
 .player {
-
-    filter:
-        drop-shadow(
-            0 0 8px
-            #00eaff
-        );
-
+    color: #00eaff;
 }
 
 
 .cpu {
-
-    filter:
-        drop-shadow(
-            0 0 8px
-            #ff315d
-        );
-
+    color: #ff335f;
 }
 
 
-/* =========================
-   BODY
-========================= */
+/* =====================================================
+   HEAD
+   ===================================================== */
 
-.head {
-
+.fighter-head {
     position: absolute;
 
-    width: 30px;
+    width: 43px;
 
-    height: 30px;
+    height: 43px;
 
-    left: 12px;
+    left: 6px;
 
     top: 0;
 
     border-radius: 50%;
 
-    background: #ddd;
+    background:
+        #eeeeee;
 
     border:
-        3px solid
-        white;
+        3px solid white;
 
+    box-shadow:
+        0 0 12px currentColor;
 }
 
 
-.body {
+/* =====================================================
+   BODY
+   ===================================================== */
 
+.fighter-body {
     position: absolute;
 
-    width: 34px;
+    width: 49px;
 
-    height: 45px;
+    height: 63px;
 
-    left: 10px;
+    left: 3px;
 
-    top: 28px;
+    top: 42px;
 
-    border-radius: 8px;
+    border-radius:
+        10px;
 
     background:
-        #00eaff;
+        currentColor;
 
     border:
-        2px solid
-        white;
+        2px solid white;
 
+    box-shadow:
+        0 0 18px currentColor;
 }
 
 
-.cpu .body {
-
-    background:
-        #ff315d;
-
-}
-
-
-/* =========================
+/* =====================================================
    ARMS
-========================= */
+   ===================================================== */
 
-.arm {
-
+.fighter-arm {
     position: absolute;
 
-    width: 12px;
+    width: 19px;
 
-    height: 40px;
+    height: 60px;
 
-    top: 32px;
+    top: 46px;
 
-    border-radius: 8px;
+    background:
+        #bcbcbc;
 
-    background: #bbb;
+    border-radius:
+        15px;
+
+    z-index: -1;
 
     transform-origin:
         top center;
-
 }
 
 
-.arm1 {
-
-    left: 1px;
+.fighter-arm-left {
+    left: -13px;
 
     transform:
         rotate(20deg);
-
 }
 
 
-.arm2 {
-
-    right: 1px;
+.fighter-arm-right {
+    right: -13px;
 
     transform:
         rotate(-20deg);
-
 }
 
 
-/* =========================
+/* =====================================================
    LEGS
-========================= */
+   ===================================================== */
 
-.leg {
-
+.fighter-leg {
     position: absolute;
 
-    width: 13px;
+    width: 20px;
 
-    height: 40px;
+    height: 60px;
 
-    top: 70px;
+    top: 95px;
 
-    border-radius: 8px;
+    background:
+        #999999;
 
-    background: #888;
+    border-radius:
+        12px;
+
+    z-index: -1;
 
     transform-origin:
         top center;
-
 }
 
 
-.leg1 {
-
-    left: 13px;
+.fighter-leg-left {
+    left: 8px;
 
     transform:
         rotate(8deg);
-
 }
 
 
-.leg2 {
-
-    right: 13px;
+.fighter-leg-right {
+    right: 8px;
 
     transform:
         rotate(-8deg);
-
 }
 
 
-/* =========================
+/* =====================================================
    ATTACK ANIMATIONS
-========================= */
+   ===================================================== */
 
-.fighter.punching .arm2 {
-
+.fighter.punch .fighter-arm-right {
     transform:
         rotate(-75deg)
-        translateX(18px);
-
+        translateX(25px);
 }
 
 
-.fighter.kicking .leg2 {
-
+.fighter.kick .fighter-leg-right {
     transform:
-        rotate(-70deg)
-        translateX(18px);
-
+        rotate(-65deg)
+        translateX(25px);
 }
 
 
-.fighter.blocking .arm1 {
-
+.fighter.blocking .fighter-arm-left {
     transform:
-        rotate(-70deg);
-
+        rotate(-65deg);
 }
 
 
-.fighter.blocking .arm2 {
-
+.fighter.blocking .fighter-arm-right {
     transform:
-        rotate(70deg);
-
+        rotate(65deg);
 }
 
 
-/* =========================
-   HIT
-========================= */
+/* =====================================================
+   HIT EFFECT
+   ===================================================== */
 
-#hitEffect {
-
+.hit-effect {
     position: absolute;
 
-    display: none;
+    left: 50%;
 
-    z-index: 50;
+    bottom: 250px;
 
-    font-size: 30px;
+    transform:
+        translate(-50%, 10px);
 
-    font-weight: 900;
+    font-size: 25px;
 
-    color: white;
+    font-weight: bold;
 
-    text-shadow:
-        0 0 8px white,
-        0 0 20px #00eaff;
+    opacity: 0;
 
     pointer-events: none;
 
+    z-index: 100;
 }
 
 
-#hitEffect.show {
-
-    display: block;
-
+.hit-effect.show {
     animation:
-        hitPop
-        0.35s
-        ease-out;
-
+        hitPop 0.4s ease;
 }
 
 
 @keyframes hitPop {
 
     0% {
-
-        transform:
-            scale(0.5);
-
         opacity: 0;
 
+        transform:
+            translate(-50%, 15px)
+            scale(0.7);
     }
 
     40% {
-
-        transform:
-            scale(1.4);
-
         opacity: 1;
 
+        transform:
+            translate(-50%, 0)
+            scale(1.15);
     }
 
     100% {
-
-        transform:
-            scale(1);
-
         opacity: 0;
 
+        transform:
+            translate(-50%, -25px)
+            scale(1);
     }
-
 }
 
 
-/* =========================
+/* =====================================================
    BLOCK COUNTDOWN
-========================= */
+   ===================================================== */
 
 .block-indicator {
-
     position: fixed;
 
-    top: 14px;
+    top: 18px;
 
-    right: 18px;
+    right: 20px;
 
-    width: 52px;
+    width: 55px;
 
-    height: 52px;
+    height: 55px;
 
-    display: none;
+    display: flex;
 
     align-items: center;
 
     justify-content: center;
 
     border:
-        2px solid
-        #00eaff;
-
-    background:
-        rgba(
-            5,
-            10,
-            20,
-            0.94
-        );
-
-    color:
-        #00eaff;
-
-    font-size: 25px;
-
-    font-weight: 900;
+        2px solid #00eaff;
 
     border-radius: 8px;
 
+    background:
+        rgba(5,10,25,0.95);
+
+    color: #00eaff;
+
+    font-size: 28px;
+
+    font-weight: bold;
+
     box-shadow:
-        0 0 18px
-        rgba(
-            0,
-            234,
-            255,
-            0.45
-        );
+        0 0 20px #00eaff;
 
     z-index: 5000;
 
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
 }
 
 
 .block-indicator.show {
+    opacity: 1;
+
+    visibility: visible;
+}
+
+
+/* =====================================================
+   CONTROLS
+   ===================================================== */
+
+.controls {
+    width: min(1100px, 96vw);
+
+    margin: 18px auto 30px;
 
     display: flex;
 
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 20px;
+
+    position: relative;
+
+    z-index: 50;
 }
 
 
-/*
-    During fullscreen the indicator remains
-    above everything.
-*/
-
-:fullscreen .block-indicator {
-
-    z-index: 999999;
-
-}
-
-
-/* =========================
-   CONTROLS
-========================= */
-
-.arena-buttons {
-
-    margin: 8px;
-
-}
-
-
-.controls-section {
-
-    margin:
-        12px auto;
-
-}
-
-
-.controls-section h3 {
-
+.control-group h3 {
     font-size: 13px;
-
-    color: #aaa;
 
     letter-spacing: 2px;
 
     margin-bottom: 8px;
 
+    color: #00eaff;
 }
 
 
-.controls {
+.control-row {
+    display: inline-flex;
 
-    display: flex;
+    align-items: center;
 
-    justify-content: center;
+    gap: 6px;
 
-    flex-wrap: wrap;
+    margin-right: 12px;
 
-    gap: 10px;
+    color: #aaa;
 
+    font-size: 12px;
 }
 
 
-.controls div {
-
-    background:
-        #11131d;
+.key {
+    padding: 4px 7px;
 
     border:
-        1px solid
-        #292b3d;
-
-    padding:
-        7px
-        10px;
+        1px solid #444;
 
     border-radius: 5px;
 
-    font-size: 11px;
+    background:
+        #171727;
 
+    color: white;
+
+    font-weight: bold;
 }
 
 
-.controls b {
-
-    color:
-        #00eaff;
-
-}
-
-
-/* =========================
-   GAME BUTTONS
-========================= */
+/* =====================================================
+   BUTTONS
+   ===================================================== */
 
 .game-buttons {
-
     display: flex;
-
-    justify-content: center;
 
     gap: 10px;
 
-    margin: 15px;
+    flex-wrap: wrap;
 
+    justify-content: flex-end;
+
+    position: relative;
+
+    z-index: 100;
 }
 
 
-.primary {
+.main-button {
+    padding: 11px 17px;
 
+    border:
+        1px solid #00eaff;
+
+    border-radius: 8px;
+
+    background:
+        #11152b;
+
+    color: #00eaff;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    position: relative;
+
+    z-index: 101;
+
+    transition:
+        0.2s ease;
+}
+
+
+.main-button:hover {
     background:
         #00eaff;
 
     color:
-        #001016;
+        #07101a;
 
-    border-color:
-        #00eaff;
-
-    padding:
-        12px
-        28px;
-
+    box-shadow:
+        0 0 15px #00eaff;
 }
 
 
-/* =========================
+.main-button:active {
+    transform:
+        scale(0.96);
+}
+
+
+/* =====================================================
    RESULT OVERLAY
-========================= */
+   ===================================================== */
+
+/*
+   VERY IMPORTANT:
+   The hidden overlay has pointer-events:none.
+
+   Therefore it CANNOT block any buttons.
+*/
 
 .result-overlay {
-
     position: fixed;
 
     inset: 0;
@@ -1090,12 +958,10 @@ button:active {
     justify-content: center;
 
     background:
-        rgba(
-            0,
-            0,
-            0,
-            0.84
-        );
+        rgba(3,3,12,0.82);
+
+    backdrop-filter:
+        blur(7px);
 
     z-index: 1000000;
 
@@ -1107,258 +973,222 @@ button:active {
 
     transition:
         opacity 0.25s ease;
-
 }
 
 
 .result-overlay.show {
-
     opacity: 1;
 
     visibility: visible;
 
     pointer-events: auto;
-
 }
 
 
 .result-box {
+    width: min(500px, 90vw);
+
+    padding: 40px;
+
+    text-align: center;
 
     position: relative;
 
-    z-index: 1000002;
-
-    width:
-        min(
-            450px,
-            90vw
-        );
-
-    padding: 35px;
+    overflow: hidden;
 
     border:
-        2px solid
-        #00eaff;
+        2px solid #00eaff;
 
-    border-radius: 15px;
+    border-radius: 18px;
 
     background:
         linear-gradient(
-            145deg,
-            #111322,
-            #080911
+            180deg,
+            #161633,
+            #0b0b18
         );
 
     box-shadow:
-        0 0 40px
-        rgba(
-            0,
-            234,
-            255,
-            0.35
-        );
-
-    animation:
-        popupAppear
-        0.45s
-        ease-out;
-
+        0 0 50px rgba(0,234,255,0.3);
 }
 
 
-@keyframes popupAppear {
+.result-box h2 {
+    font-size: 48px;
 
-    0% {
+    color: #00eaff;
 
-        transform:
-            scale(0.7)
-            translateY(30px);
+    text-shadow:
+        0 0 15px #00eaff;
 
-        opacity: 0;
-
-    }
-
-    100% {
-
-        transform:
-            scale(1)
-            translateY(0);
-
-        opacity: 1;
-
-    }
-
+    margin-bottom: 15px;
 }
 
 
-.match-complete {
-
-    color:
-        #aaa;
-
-    font-size: 13px;
-
-    letter-spacing: 3px;
-
-}
-
-
-.result-box h1 {
-
-    font-size: 50px;
-
-    margin:
-        12px
-        0;
-
-    color:
-        #00eaff;
-
-}
-
-
-#resultScore {
-
-    font-size: 38px;
+.result-score {
+    font-size: 40px;
 
     font-weight: bold;
 
-    margin-bottom: 12px;
-
+    margin-bottom: 10px;
 }
 
 
 .result-box p {
+    color: #aaa;
 
-    color:
-        #aaa;
-
-    margin-bottom: 22px;
-
+    margin-bottom: 25px;
 }
 
 
-/* =========================
+/* =====================================================
    CONFETTI
-========================= */
+   ===================================================== */
 
-.confetti-container {
-
+.confetti {
     position: absolute;
 
     inset: 0;
 
-    overflow: hidden;
-
     pointer-events: none;
 
-    z-index: 1000001;
-
+    overflow: hidden;
 }
 
 
-.confetti {
-
+.confetti-piece {
     position: absolute;
 
-    top: -30px;
+    top: -20px;
 
-    width: 9px;
+    width: 8px;
 
-    height: 16px;
+    height: 14px;
+
+    background:
+        #00eaff;
 
     animation:
-        confettiFall
-        var(--fall-time)
-        linear
-        forwards;
+        confettiFall 2.5s linear forwards;
+}
 
-    animation-delay:
-        var(--delay);
 
+.confetti-piece:nth-child(3n) {
+    background: #ff335f;
+}
+
+
+.confetti-piece:nth-child(3n + 1) {
+    background: #fff;
+}
+
+
+.confetti-piece:nth-child(4n) {
+    background: #ffe600;
 }
 
 
 @keyframes confettiFall {
 
     0% {
-
-        transform:
-            translateY(-30px)
-            rotate(0deg);
+        top: -20px;
 
         opacity: 1;
-
     }
 
     100% {
-
-        transform:
-            translate(
-                var(--drift),
-                110vh
-            )
-            rotate(720deg);
+        top: 110%;
 
         opacity: 0;
 
+        transform:
+            rotate(720deg);
     }
-
 }
 
 
-/* =========================
+/* =====================================================
+   FULLSCREEN
+   ===================================================== */
+
+:fullscreen {
+    background:
+        #080812;
+}
+
+
+:fullscreen #arena {
+    width: 100vw;
+
+    height: 100vh;
+
+    max-width: none;
+
+    margin: 0;
+
+    border-radius: 0;
+
+    border: none;
+}
+
+
+:fullscreen .block-indicator {
+    display: flex;
+
+    position: fixed;
+
+    top: 20px;
+
+    right: 20px;
+}
+
+
+/* =====================================================
    MOBILE
-========================= */
+   ===================================================== */
 
-@media (max-width: 700px) {
+@media (max-width: 750px) {
 
-    .logo {
+    .topbar {
+        flex-direction: column;
 
-        font-size: 25px;
-
+        text-align: center;
     }
 
 
     .hud {
-
         grid-template-columns:
             1fr
             100px
             1fr;
 
-        gap: 7px;
-
+        gap: 8px;
     }
 
 
-    #arena {
+    .controls {
+        flex-direction: column;
 
-        height: 450px;
-
+        align-items: stretch;
     }
 
 
-    .platform-left-high,
+    .game-buttons {
+        justify-content: center;
+    }
+
+
+    .control-row {
+        margin-bottom: 5px;
+    }
+
+
+    .platform-left-high {
+        left: 10%;
+    }
+
+
     .platform-right-high {
-
-        display: none;
-
+        right: 10%;
     }
-
-
-    .platform-left-low,
-    .platform-right-low {
-
-        width: 130px;
-
-    }
-
-
-    .platform-center {
-
-        width: 150px;
-
-    }
-
 }
