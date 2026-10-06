@@ -11,368 +11,804 @@
 
 <body>
 
-<header class="topbar">
+    <!-- =====================================================
+         TOP NAVIGATION
+         ===================================================== -->
 
-    <div class="title-area">
+    <header class="site-header">
 
-        <h1>NEON FIGHTERS</h1>
+        <div class="brand">
+            <div class="brand-icon">⚡</div>
 
-        <p>Fight. Jump. Block. Win.</p>
-
-    </div>
-
-
-    <div class="difficulty">
-
-        <button id="easyBtn" class="difficulty-btn active">
-            EASY
-        </button>
-
-        <button id="mediumBtn" class="difficulty-btn">
-            MEDIUM
-        </button>
-
-        <button id="hardBtn" class="difficulty-btn">
-            HARD
-        </button>
-
-    </div>
-
-</header>
-
-
-<section class="hud">
-
-    <div class="health-section">
-
-        <div class="hud-label">
-            PLAYER
+            <div>
+                <h1>NEON FIGHTERS</h1>
+                <span>FIGHT • JUMP • BLOCK • WIN</span>
+            </div>
         </div>
 
-        <div class="health-bar">
+        <nav class="top-nav">
 
-            <div
-                id="playerHealth"
-                class="health-fill player-health">
+            <a href="#game">GAME</a>
+            <a href="#controls">CONTROLS</a>
+            <a href="#howToPlay">HOW TO PLAY</a>
+            <a href="#difficulty">DIFFICULTY</a>
+
+        </nav>
+
+    </header>
+
+
+    <!-- =====================================================
+         HERO / START SCREEN
+         ===================================================== -->
+
+    <section class="hero" id="game">
+
+        <div class="hero-glow"></div>
+
+        <div class="hero-content">
+
+            <div class="eyebrow">
+                ⚡ WELCOME TO THE ARENA ⚡
             </div>
 
-        </div>
-
-        <div
-            id="playerHealthText"
-            class="health-number">
-            100
-        </div>
-
-    </div>
-
-
-    <div class="round-info">
-
-        <div class="round-label">
-            ROUND
-        </div>
-
-        <div>
-
-            <span
-                id="playerScore"
-                class="score">
-                0
-            </span>
-
-            <span class="score-dash">
-                -
-            </span>
-
-            <span
-                id="cpuScore"
-                class="score">
-                0
-            </span>
-
-        </div>
-
-        <div
-            id="timer"
-            class="timer">
-            60
-        </div>
-
-    </div>
-
-
-    <div class="health-section cpu-hud">
-
-        <div class="hud-label">
-            CPU
-        </div>
-
-        <div class="health-bar">
-
-            <div
-                id="cpuHealth"
-                class="health-fill cpu-health">
-            </div>
-
-        </div>
-
-        <div
-            id="cpuHealthText"
-            class="health-number">
-            100
-        </div>
-
-    </div>
-
-</section>
-
-
-<main id="arena">
-
-    <div class="arena-grid"></div>
-
-
-    <!-- LOW PLATFORMS -->
-
-    <div
-        class="platform platform-left-low">
-    </div>
-
-    <div
-        class="platform platform-right-low">
-    </div>
-
-
-    <!-- CENTRE PLATFORM -->
-
-    <div
-        class="platform platform-center">
-    </div>
-
-
-    <!-- HIGH PLATFORMS -->
-
-    <div
-        class="platform platform-left-high">
-    </div>
-
-    <div
-        class="platform platform-right-high">
-    </div>
-
-
-    <!-- FLOOR -->
-
-    <div class="floor"></div>
-
-
-    <!-- PLAYER -->
-
-    <div
-        id="player"
-        class="fighter player">
-
-        <div class="fighter-head"></div>
-
-        <div class="fighter-body"></div>
-
-        <div class="fighter-arm fighter-arm-left"></div>
-
-        <div class="fighter-arm fighter-arm-right"></div>
-
-        <div class="fighter-leg fighter-leg-left"></div>
-
-        <div class="fighter-leg fighter-leg-right"></div>
-
-    </div>
-
-
-    <!-- CPU -->
-
-    <div
-        id="cpu"
-        class="fighter cpu">
-
-        <div class="fighter-head"></div>
-
-        <div class="fighter-body"></div>
-
-        <div class="fighter-arm fighter-arm-left"></div>
-
-        <div class="fighter-arm fighter-arm-right"></div>
-
-        <div class="fighter-leg fighter-leg-left"></div>
-
-        <div class="fighter-leg fighter-leg-right"></div>
-
-    </div>
-
-
-    <!-- HIT MESSAGE -->
-
-    <div
-        id="hitEffect"
-        class="hit-effect">
-        HIT!
-    </div>
-
-
-    <!-- BLOCK TIMER -->
-
-    <div
-        id="blockIndicator"
-        class="block-indicator">
-        3
-    </div>
-
-
-    <!-- RESULT -->
-
-    <div
-        id="resultOverlay"
-        class="result-overlay">
-
-        <div class="result-box">
-
-            <div
-                id="confetti"
-                class="confetti">
-            </div>
-
-            <h2 id="resultTitle">
-                YOU WIN!
+            <h2>
+                NEON
+                <span>FIGHTERS</span>
             </h2>
 
-            <div
-                id="resultScore"
-                class="result-score">
-                3 - 0
-            </div>
-
-            <p id="resultMessage">
-                Amazing fighting!
+            <p>
+                Enter the neon arena and prove your fighting skills.
             </p>
 
+
+            <div class="hero-buttons">
+
+                <button
+                    id="startBtn"
+                    class="main-play-button"
+                    type="button"
+                >
+                    <span class="play-icon">▶</span>
+                    PLAY NOW
+                </button>
+
+                <button
+                    id="fullscreenBtn"
+                    class="secondary-button"
+                    type="button"
+                >
+                    ⛶ FULLSCREEN
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="hero-stats">
+
+            <div class="stat-card">
+                <strong>3</strong>
+                <span>ROUNDS</span>
+            </div>
+
+            <div class="stat-card">
+                <strong>60</strong>
+                <span>SECONDS</span>
+            </div>
+
+            <div class="stat-card">
+                <strong>4</strong>
+                <span>MODES</span>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         DIFFICULTY
+         ===================================================== -->
+
+    <section
+        class="difficulty-section"
+        id="difficulty"
+    >
+
+        <div class="section-heading">
+
+            <span class="section-number">01</span>
+
+            <div>
+                <h2>CHOOSE YOUR OPPONENT</h2>
+
+                <p>
+                    Select a difficulty before entering the arena.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="difficulty-grid">
+
             <button
-                id="playAgainBtn"
-                class="main-button">
-                PLAY AGAIN
+                id="easyBtn"
+                class="difficulty-card active"
+                type="button"
+            >
+
+                <span class="difficulty-icon">🌱</span>
+
+                <strong>EASY</strong>
+
+                <small>
+                    Slow and forgiving
+                </small>
+
+            </button>
+
+
+            <button
+                id="mediumBtn"
+                class="difficulty-card"
+                type="button"
+            >
+
+                <span class="difficulty-icon">⚔️</span>
+
+                <strong>MEDIUM</strong>
+
+                <small>
+                    A balanced challenge
+                </small>
+
+            </button>
+
+
+            <button
+                id="hardBtn"
+                class="difficulty-card"
+                type="button"
+            >
+
+                <span class="difficulty-icon">🔥</span>
+
+                <strong>HARD</strong>
+
+                <small>
+                    Fast and dangerous
+                </small>
+
+            </button>
+
+
+            <button
+                id="veryHardBtn"
+                class="difficulty-card very-hard-card"
+                type="button"
+            >
+
+                <span class="difficulty-icon">☠️</span>
+
+                <strong>VERY HARD</strong>
+
+                <small>
+                    THREE CPU FIGHTERS
+                </small>
+
             </button>
 
         </div>
 
-    </div>
-
-</main>
+    </section>
 
 
-<section class="controls">
+    <!-- =====================================================
+         GAME AREA
+         ===================================================== -->
 
-    <div class="control-group">
+    <section class="game-section">
 
-        <h3>
-            CONTROLS
-        </h3>
+        <div class="game-title-row">
 
+            <div>
+                <span class="mini-label">
+                    LIVE BATTLE
+                </span>
 
-        <div class="control-row">
+                <h2>NEON ARENA</h2>
+            </div>
 
-            <span class="key">
-                ←
-            </span>
-
-            <span class="key">
-                →
-            </span>
-
-            <span>
-                Move
-            </span>
+            <div class="game-status">
+                <span class="status-dot"></span>
+                READY
+            </div>
 
         </div>
 
 
-        <div class="control-row">
+        <!-- =================================================
+             HUD
+             ================================================= -->
 
-            <span class="key">
-                ↑
-            </span>
+        <div class="hud">
 
-            <span>
-                Jump
-            </span>
+            <!-- PLAYER -->
+
+            <div class="fighter-hud player-hud">
+
+                <div class="hud-name">
+                    <span>⚡</span>
+                    PLAYER
+                </div>
+
+                <div class="health-bar">
+                    <div
+                        id="playerHealth"
+                        class="health-fill player-health"
+                    ></div>
+                </div>
+
+                <div
+                    id="playerHealthText"
+                    class="health-number"
+                >
+                    100
+                </div>
+
+            </div>
+
+
+            <!-- ROUND -->
+
+            <div class="round-info">
+
+                <div class="round-label">
+                    ROUND
+                </div>
+
+                <div class="round-score">
+
+                    <span
+                        id="playerScore"
+                        class="score player-score"
+                    >
+                        0
+                    </span>
+
+                    <span class="score-dash">
+                        :
+                    </span>
+
+                    <span
+                        id="cpuScore"
+                        class="score cpu-score"
+                    >
+                        0
+                    </span>
+
+                </div>
+
+                <div
+                    id="timer"
+                    class="timer"
+                >
+                    60
+                </div>
+
+            </div>
+
+
+            <!-- NORMAL CPU -->
+
+            <div
+                class="fighter-hud cpu-hud"
+                id="normalCpuHud"
+            >
+
+                <div class="hud-name">
+                    CPU
+                    <span>🤖</span>
+                </div>
+
+                <div class="health-bar">
+                    <div
+                        id="cpuHealth"
+                        class="health-fill cpu-health"
+                    ></div>
+                </div>
+
+                <div
+                    id="cpuHealthText"
+                    class="health-number"
+                >
+                    100
+                </div>
+
+            </div>
+
+
+            <!-- VERY HARD CPU BARS -->
+
+            <div
+                id="veryHardHud"
+                class="very-hard-hud"
+            >
+
+                <div class="squad-title">
+                    ☠ CPU SQUAD
+                </div>
+
+                <div class="squad-health">
+
+                    <div class="mini-health-row">
+                        <span>CPU 1</span>
+
+                        <div class="mini-health">
+                            <div
+                                id="cpu1Health"
+                                class="mini-health-fill"
+                            ></div>
+                        </div>
+
+                        <b id="cpu1HealthText">100</b>
+                    </div>
+
+
+                    <div class="mini-health-row">
+                        <span>CPU 2</span>
+
+                        <div class="mini-health">
+                            <div
+                                id="cpu2Health"
+                                class="mini-health-fill"
+                            ></div>
+                        </div>
+
+                        <b id="cpu2HealthText">100</b>
+                    </div>
+
+
+                    <div class="mini-health-row">
+                        <span>CPU 3</span>
+
+                        <div class="mini-health">
+                            <div
+                                id="cpu3Health"
+                                class="mini-health-fill"
+                            ></div>
+                        </div>
+
+                        <b id="cpu3HealthText">100</b>
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
 
 
-        <div class="control-row">
+        <!-- =================================================
+             ARENA
+             ================================================= -->
 
-            <span class="key">
-                SPACE
-            </span>
+        <div
+            id="arena"
+            class="arena"
+        >
 
-            <span>
-                Punch
-            </span>
+            <div class="arena-grid"></div>
+
+            <div class="stars">
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+            </div>
+
+
+            <!-- PLATFORMS -->
+
+            <div
+                class="platform platform-left-low"
+            ></div>
+
+            <div
+                class="platform platform-right-low"
+            ></div>
+
+            <div
+                class="platform platform-center"
+            ></div>
+
+            <div
+                class="platform platform-left-high"
+            ></div>
+
+            <div
+                class="platform platform-right-high"
+            ></div>
+
+
+            <!-- FLOOR -->
+
+            <div class="floor"></div>
+
+
+            <!-- =================================================
+                 PLAYER
+                 ================================================= -->
+
+            <div
+                id="player"
+                class="fighter player"
+            >
+
+                <div class="fighter-head"></div>
+
+                <div class="fighter-body"></div>
+
+                <div
+                    class="fighter-arm fighter-arm-left"
+                ></div>
+
+                <div
+                    class="fighter-arm fighter-arm-right"
+                ></div>
+
+                <div
+                    class="fighter-leg fighter-leg-left"
+                ></div>
+
+                <div
+                    class="fighter-leg fighter-leg-right"
+                ></div>
+
+            </div>
+
+
+            <!-- =================================================
+                 CPU 1
+                 ================================================= -->
+
+            <div
+                id="cpu"
+                class="fighter cpu"
+            >
+
+                <div class="fighter-head"></div>
+
+                <div class="fighter-body"></div>
+
+                <div
+                    class="fighter-arm fighter-arm-left"
+                ></div>
+
+                <div
+                    class="fighter-arm fighter-arm-right"
+                ></div>
+
+                <div
+                    class="fighter-leg fighter-leg-left"
+                ></div>
+
+                <div
+                    class="fighter-leg fighter-leg-right"
+                ></div>
+
+            </div>
+
+
+            <!-- =================================================
+                 CPU 2
+                 ================================================= -->
+
+            <div
+                id="cpu2"
+                class="fighter cpu cpu-two"
+            >
+
+                <div class="fighter-head"></div>
+
+                <div class="fighter-body"></div>
+
+                <div
+                    class="fighter-arm fighter-arm-left"
+                ></div>
+
+                <div
+                    class="fighter-arm fighter-arm-right"
+                ></div>
+
+                <div
+                    class="fighter-leg fighter-leg-left"
+                ></div>
+
+                <div
+                    class="fighter-leg fighter-leg-right"
+                ></div>
+
+            </div>
+
+
+            <!-- =================================================
+                 CPU 3
+                 ================================================= -->
+
+            <div
+                id="cpu3"
+                class="fighter cpu cpu-three"
+            >
+
+                <div class="fighter-head"></div>
+
+                <div class="fighter-body"></div>
+
+                <div
+                    class="fighter-arm fighter-arm-left"
+                ></div>
+
+                <div
+                    class="fighter-arm fighter-arm-right"
+                ></div>
+
+                <div
+                    class="fighter-leg fighter-leg-left"
+                ></div>
+
+                <div
+                    class="fighter-leg fighter-leg-right"
+                ></div>
+
+            </div>
+
+
+            <!-- EFFECTS -->
+
+            <div
+                id="hitEffect"
+                class="hit-effect"
+            >
+                HIT!
+            </div>
+
+
+            <div
+                id="blockIndicator"
+                class="block-indicator"
+            >
+                5
+            </div>
+
+
+            <!-- =================================================
+                 RESULT
+                 ================================================= -->
+
+            <div
+                id="resultOverlay"
+                class="result-overlay"
+            >
+
+                <div class="result-box">
+
+                    <div
+                        id="confetti"
+                        class="confetti"
+                    ></div>
+
+                    <div class="result-icon">
+                        🏆
+                    </div>
+
+                    <h2 id="resultTitle">
+                        YOU WIN!
+                    </h2>
+
+                    <div
+                        id="resultScore"
+                        class="result-score"
+                    >
+                        2 : 0
+                    </div>
+
+                    <p id="resultMessage">
+                        Amazing fighting!
+                    </p>
+
+                    <button
+                        id="playAgainBtn"
+                        class="main-play-button"
+                        type="button"
+                    >
+                        ▶ PLAY AGAIN
+                    </button>
+
+                </div>
+
+            </div>
 
         </div>
 
 
-        <div class="control-row">
+        <!-- GAME BUTTONS -->
 
-            <span class="key">
-                F
-            </span>
+        <div class="game-actions">
 
-            <span>
-                Kick
-            </span>
+            <button
+                id="restartBtn"
+                class="action-button"
+                type="button"
+            >
+                ↻ RESTART
+            </button>
+
+            <button
+                id="gameFullscreenBtn"
+                class="action-button"
+                type="button"
+            >
+                ⛶ FULLSCREEN
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CONTROLS
+         ===================================================== -->
+
+    <section
+        class="info-section"
+        id="controls"
+    >
+
+        <div class="section-heading">
+
+            <span class="section-number">02</span>
+
+            <div>
+                <h2>CONTROLS</h2>
+
+                <p>
+                    Master these controls to dominate the arena.
+                </p>
+            </div>
 
         </div>
 
 
-        <div class="control-row">
+        <div class="controls-grid">
 
-            <span class="key">
-                D
-            </span>
+            <div class="control-card">
+                <span class="control-key">← →</span>
+                <strong>MOVE</strong>
+                <small>Move around the arena</small>
+            </div>
 
-            <span>
-                Block
-            </span>
+            <div class="control-card">
+                <span class="control-key">↑</span>
+                <strong>JUMP</strong>
+                <small>Jump onto platforms</small>
+            </div>
+
+            <div class="control-card">
+                <span class="control-key">SPACE</span>
+                <strong>PUNCH</strong>
+                <small>Quick close attack</small>
+            </div>
+
+            <div class="control-card">
+                <span class="control-key">F</span>
+                <strong>KICK</strong>
+                <small>Stronger attack</small>
+            </div>
+
+            <div class="control-card">
+                <span class="control-key">D</span>
+                <strong>BLOCK</strong>
+                <small>Protect yourself</small>
+            </div>
 
         </div>
 
-    </div>
+    </section>
 
 
-    <div class="game-buttons">
+    <!-- =====================================================
+         HOW TO PLAY
+         ===================================================== -->
 
-        <button
-            id="startBtn"
-            class="main-button">
-            START GAME
-        </button>
+    <section
+        class="info-section how-to"
+        id="howToPlay"
+    >
 
-        <button
-            id="restartBtn"
-            class="main-button">
-            RESTART
-        </button>
+        <div class="section-heading">
 
-        <button
-            id="fullscreenBtn"
-            class="main-button">
-            FULLSCREEN
-        </button>
+            <span class="section-number">03</span>
 
-    </div>
+            <div>
+                <h2>HOW TO PLAY</h2>
 
-</section>
+                <p>
+                    Everything you need to know before the fight.
+                </p>
+            </div>
+
+        </div>
 
 
-<script src="js/game.js"></script>
+        <div class="how-grid">
+
+            <div class="how-card">
+                <span>01</span>
+                <h3>CHOOSE</h3>
+                <p>
+                    Select your difficulty and press PLAY NOW.
+                </p>
+            </div>
+
+            <div class="how-card">
+                <span>02</span>
+                <h3>FIGHT</h3>
+                <p>
+                    Move close to your opponent before attacking.
+                </p>
+            </div>
+
+            <div class="how-card">
+                <span>03</span>
+                <h3>BLOCK</h3>
+                <p>
+                    Use D to block attacks for a limited time.
+                </p>
+            </div>
+
+            <div class="how-card">
+                <span>04</span>
+                <h3>WIN</h3>
+                <p>
+                    Win two rounds to win the match.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <footer>
+
+        <div>
+            <strong>NEON FIGHTERS</strong>
+            <span>Built for the arena.</span>
+        </div>
+
+        <span>
+            ⚡ FIGHT WITH STYLE ⚡
+        </span>
+
+    </footer>
+
+
+    <script src="js/game.js"></script>
 
 </body>
 </html>
