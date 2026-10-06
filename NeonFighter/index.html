@@ -11,231 +11,242 @@
 
 <body>
 
-    <header class="topbar">
+<header class="topbar">
+
+    <div class="title-area">
+
+        <h1>NEON FIGHTERS</h1>
+
+        <p>Fight. Jump. Block. Win.</p>
+
+    </div>
+
+
+    <div class="difficulty">
+
+        <button id="easyBtn" class="difficulty-btn active">
+            EASY
+        </button>
+
+        <button id="mediumBtn" class="difficulty-btn">
+            MEDIUM
+        </button>
+
+        <button id="hardBtn" class="difficulty-btn">
+            HARD
+        </button>
+
+    </div>
+
+</header>
+
+
+<section class="hud">
+
+    <div class="health-section">
+
+        <div class="hud-label">
+            PLAYER
+        </div>
+
+        <div class="health-bar">
+
+            <div
+                id="playerHealth"
+                class="health-fill player-health">
+            </div>
+
+        </div>
+
+        <div
+            id="playerHealthText"
+            class="health-number">
+            100
+        </div>
+
+    </div>
+
+
+    <div class="round-info">
+
+        <div class="round-label">
+            ROUND
+        </div>
 
         <div>
-            <h1>NEON FIGHTERS</h1>
-            <p>Fight. Jump. Block. Win.</p>
-        </div>
 
-        <div class="difficulty">
-            <button id="easyBtn" class="difficulty-btn">EASY</button>
-            <button id="mediumBtn" class="difficulty-btn">MEDIUM</button>
-            <button id="hardBtn" class="difficulty-btn">HARD</button>
-        </div>
-
-    </header>
-
-
-    <section class="hud">
-
-        <div class="health-section player-hud">
-
-            <div class="hud-label">
-                PLAYER
-            </div>
-
-            <div class="health-bar">
-                <div id="playerHealth" class="health-fill player-health"></div>
-            </div>
-
-            <div id="playerHealthText" class="health-number">
-                100
-            </div>
-
-        </div>
-
-
-        <div class="round-info">
-
-            <div class="round-label">
-                ROUND
-            </div>
-
-            <div id="playerScore" class="score">
+            <span
+                id="playerScore"
+                class="score">
                 0
-            </div>
+            </span>
 
-            <div class="score-dash">
+            <span class="score-dash">
                 -
-            </div>
+            </span>
 
-            <div id="cpuScore" class="score">
+            <span
+                id="cpuScore"
+                class="score">
                 0
-            </div>
+            </span>
 
-            <div id="timer" class="timer">
-                60
+        </div>
+
+        <div
+            id="timer"
+            class="timer">
+            60
+        </div>
+
+    </div>
+
+
+    <div class="health-section cpu-hud">
+
+        <div class="hud-label">
+            CPU
+        </div>
+
+        <div class="health-bar">
+
+            <div
+                id="cpuHealth"
+                class="health-fill cpu-health">
             </div>
 
         </div>
 
-
-        <div class="health-section cpu-hud">
-
-            <div class="hud-label">
-                CPU
-            </div>
-
-            <div class="health-bar">
-                <div id="cpuHealth" class="health-fill cpu-health"></div>
-            </div>
-
-            <div id="cpuHealthText" class="health-number">
-                100
-            </div>
-
+        <div
+            id="cpuHealthText"
+            class="health-number">
+            100
         </div>
 
-    </section>
+    </div>
+
+</section>
 
 
-    <main id="arena">
+<main id="arena">
 
-        <div class="arena-grid"></div>
-
-
-        <!-- Platforms -->
-
-        <div class="platform platform-left-low"></div>
-
-        <div class="platform platform-right-low"></div>
-
-        <div class="platform platform-center"></div>
-
-        <div class="platform platform-left-high"></div>
-
-        <div class="platform platform-right-high"></div>
+    <div class="arena-grid"></div>
 
 
-        <!-- Floor -->
+    <!-- LOW PLATFORMS -->
 
-        <div class="floor"></div>
+    <div
+        class="platform platform-left-low">
+    </div>
 
-
-        <!-- Player -->
-
-        <div id="player" class="fighter player">
-
-            <div class="fighter-head"></div>
-
-            <div class="fighter-body"></div>
-
-            <div class="fighter-arm fighter-arm-left"></div>
-
-            <div class="fighter-arm fighter-arm-right"></div>
-
-            <div class="fighter-leg fighter-leg-left"></div>
-
-            <div class="fighter-leg fighter-leg-right"></div>
-
-        </div>
+    <div
+        class="platform platform-right-low">
+    </div>
 
 
-        <!-- CPU -->
+    <!-- CENTRE PLATFORM -->
 
-        <div id="cpu" class="fighter cpu">
-
-            <div class="fighter-head"></div>
-
-            <div class="fighter-body"></div>
-
-            <div class="fighter-arm fighter-arm-left"></div>
-
-            <div class="fighter-arm fighter-arm-right"></div>
-
-            <div class="fighter-leg fighter-leg-left"></div>
-
-            <div class="fighter-leg fighter-leg-right"></div>
-
-        </div>
+    <div
+        class="platform platform-center">
+    </div>
 
 
-        <!-- Hit message -->
+    <!-- HIGH PLATFORMS -->
 
-        <div id="hitEffect" class="hit-effect">
-            HIT!
-        </div>
+    <div
+        class="platform platform-left-high">
+    </div>
 
-    </main>
+    <div
+        class="platform platform-right-high">
+    </div>
 
 
-    <!-- Block countdown -->
+    <!-- FLOOR -->
 
-    <div id="blockIndicator" class="block-indicator">
+    <div class="floor"></div>
+
+
+    <!-- PLAYER -->
+
+    <div
+        id="player"
+        class="fighter player">
+
+        <div class="fighter-head"></div>
+
+        <div class="fighter-body"></div>
+
+        <div class="fighter-arm fighter-arm-left"></div>
+
+        <div class="fighter-arm fighter-arm-right"></div>
+
+        <div class="fighter-leg fighter-leg-left"></div>
+
+        <div class="fighter-leg fighter-leg-right"></div>
+
+    </div>
+
+
+    <!-- CPU -->
+
+    <div
+        id="cpu"
+        class="fighter cpu">
+
+        <div class="fighter-head"></div>
+
+        <div class="fighter-body"></div>
+
+        <div class="fighter-arm fighter-arm-left"></div>
+
+        <div class="fighter-arm fighter-arm-right"></div>
+
+        <div class="fighter-leg fighter-leg-left"></div>
+
+        <div class="fighter-leg fighter-leg-right"></div>
+
+    </div>
+
+
+    <!-- HIT MESSAGE -->
+
+    <div
+        id="hitEffect"
+        class="hit-effect">
+        HIT!
+    </div>
+
+
+    <!-- BLOCK TIMER -->
+
+    <div
+        id="blockIndicator"
+        class="block-indicator">
         3
     </div>
 
 
-    <!-- Controls -->
+    <!-- RESULT -->
 
-    <section class="controls">
-
-        <div class="control-group">
-
-            <h3>CONTROLS</h3>
-
-            <div class="control-row">
-                <span class="key">←</span>
-                <span class="key">→</span>
-                <span>Move</span>
-            </div>
-
-            <div class="control-row">
-                <span class="key">↑</span>
-                <span>Jump</span>
-            </div>
-
-            <div class="control-row">
-                <span class="key">SPACE</span>
-                <span>Punch</span>
-            </div>
-
-            <div class="control-row">
-                <span class="key">F</span>
-                <span>Kick</span>
-            </div>
-
-            <div class="control-row">
-                <span class="key">D</span>
-                <span>Block</span>
-            </div>
-
-        </div>
-
-
-        <div class="game-buttons">
-
-            <button id="startBtn" class="main-button">
-                START GAME
-            </button>
-
-            <button id="restartBtn" class="main-button">
-                RESTART
-            </button>
-
-            <button id="fullscreenBtn" class="main-button">
-                FULLSCREEN
-            </button>
-
-        </div>
-
-    </section>
-
-
-    <!-- Result popup -->
-
-    <div id="resultOverlay" class="result-overlay">
+    <div
+        id="resultOverlay"
+        class="result-overlay">
 
         <div class="result-box">
 
-            <div id="confetti" class="confetti"></div>
+            <div
+                id="confetti"
+                class="confetti">
+            </div>
 
             <h2 id="resultTitle">
                 YOU WIN!
             </h2>
 
-            <div id="resultScore" class="result-score">
+            <div
+                id="resultScore"
+                class="result-score">
                 3 - 0
             </div>
 
@@ -243,7 +254,9 @@
                 Amazing fighting!
             </p>
 
-            <button id="playAgainBtn" class="main-button">
+            <button
+                id="playAgainBtn"
+                class="main-button">
                 PLAY AGAIN
             </button>
 
@@ -251,8 +264,115 @@
 
     </div>
 
+</main>
 
-    <script src="js/game.js"></script>
+
+<section class="controls">
+
+    <div class="control-group">
+
+        <h3>
+            CONTROLS
+        </h3>
+
+
+        <div class="control-row">
+
+            <span class="key">
+                ←
+            </span>
+
+            <span class="key">
+                →
+            </span>
+
+            <span>
+                Move
+            </span>
+
+        </div>
+
+
+        <div class="control-row">
+
+            <span class="key">
+                ↑
+            </span>
+
+            <span>
+                Jump
+            </span>
+
+        </div>
+
+
+        <div class="control-row">
+
+            <span class="key">
+                SPACE
+            </span>
+
+            <span>
+                Punch
+            </span>
+
+        </div>
+
+
+        <div class="control-row">
+
+            <span class="key">
+                F
+            </span>
+
+            <span>
+                Kick
+            </span>
+
+        </div>
+
+
+        <div class="control-row">
+
+            <span class="key">
+                D
+            </span>
+
+            <span>
+                Block
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="game-buttons">
+
+        <button
+            id="startBtn"
+            class="main-button">
+            START GAME
+        </button>
+
+        <button
+            id="restartBtn"
+            class="main-button">
+            RESTART
+        </button>
+
+        <button
+            id="fullscreenBtn"
+            class="main-button">
+            FULLSCREEN
+        </button>
+
+    </div>
+
+</section>
+
+
+<script src="js/game.js"></script>
 
 </body>
 </html>

@@ -1,6 +1,8 @@
 * {
     box-sizing: border-box;
+
     margin: 0;
+
     padding: 0;
 }
 
@@ -11,9 +13,9 @@ body {
     background:
         radial-gradient(
             circle at top,
-            #202044 0%,
+            #202044,
             #101020 45%,
-            #08080f 100%
+            #08080f
         );
 
     color: white;
@@ -32,6 +34,7 @@ body {
    ===================================================== */
 
 .topbar {
+
     min-height: 90px;
 
     padding: 15px 25px;
@@ -44,18 +47,20 @@ body {
 
     gap: 20px;
 
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-
     background:
-        rgba(8,8,20,0.9);
+        rgba(8, 8, 20, 0.95);
+
+    border-bottom:
+        1px solid rgba(255,255,255,0.1);
 
     position: relative;
 
-    z-index: 50;
+    z-index: 100;
 }
 
 
 .topbar h1 {
+
     font-size: 28px;
 
     letter-spacing: 4px;
@@ -69,6 +74,7 @@ body {
 
 
 .topbar p {
+
     margin-top: 5px;
 
     color: #aaa;
@@ -80,55 +86,48 @@ body {
 
 
 /* =====================================================
-   DIFFICULTY BUTTONS
+   DIFFICULTY
    ===================================================== */
 
 .difficulty {
+
     display: flex;
 
     gap: 8px;
 
     position: relative;
 
-    z-index: 100;
+    z-index: 200;
 }
 
 
 .difficulty-btn {
-    border: 1px solid #00eaff;
+
+    padding:
+        10px 15px;
+
+    border:
+        1px solid #00eaff;
+
+    border-radius: 8px;
 
     background: #11152b;
 
     color: #00eaff;
 
-    padding: 10px 15px;
-
-    border-radius: 8px;
+    font-weight: bold;
 
     cursor: pointer;
 
-    font-weight: bold;
-
-    transition:
-        0.2s ease;
-
     position: relative;
 
-    z-index: 101;
+    z-index: 201;
 }
 
 
-.difficulty-btn:hover {
-    background: #00eaff;
-
-    color: #07101a;
-
-    box-shadow:
-        0 0 15px #00eaff;
-}
-
-
+.difficulty-btn:hover,
 .difficulty-btn.active {
+
     background: #00eaff;
 
     color: #07101a;
@@ -143,16 +142,17 @@ body {
    ===================================================== */
 
 .hud {
-    width: min(1100px, 96vw);
 
-    margin: 15px auto;
+    width:
+        min(1100px, 96vw);
+
+    margin:
+        15px auto;
 
     display: grid;
 
     grid-template-columns:
-        1fr
-        150px
-        1fr;
+        1fr 150px 1fr;
 
     gap: 20px;
 
@@ -160,16 +160,12 @@ body {
 
     position: relative;
 
-    z-index: 30;
-}
-
-
-.health-section {
-    position: relative;
+    z-index: 50;
 }
 
 
 .hud-label {
+
     font-size: 12px;
 
     letter-spacing: 3px;
@@ -179,11 +175,13 @@ body {
 
 
 .cpu-hud {
+
     text-align: right;
 }
 
 
 .health-bar {
+
     height: 18px;
 
     border-radius: 10px;
@@ -192,14 +190,13 @@ body {
 
     background: #171727;
 
-    border: 1px solid rgba(255,255,255,0.2);
-
-    box-shadow:
-        inset 0 0 10px rgba(0,0,0,0.5);
+    border:
+        1px solid rgba(255,255,255,0.2);
 }
 
 
 .health-fill {
+
     height: 100%;
 
     width: 100%;
@@ -210,11 +207,12 @@ body {
 
 
 .player-health {
+
     background:
         linear-gradient(
             90deg,
             #00eaff,
-            #00a8ff
+            #008cff
         );
 
     box-shadow:
@@ -223,6 +221,7 @@ body {
 
 
 .cpu-health {
+
     background:
         linear-gradient(
             90deg,
@@ -236,34 +235,22 @@ body {
 
 
 .health-number {
-    font-size: 12px;
 
     margin-top: 3px;
+
+    font-size: 12px;
 
     opacity: 0.8;
 }
 
 
 .round-info {
+
     text-align: center;
-
-    display: grid;
-
-    grid-template-columns:
-        1fr
-        auto
-        auto
-        auto
-        1fr;
-
-    align-items: center;
-
-    gap: 5px;
 }
 
 
 .round-label {
-    grid-column: 1 / -1;
 
     font-size: 10px;
 
@@ -274,28 +261,31 @@ body {
 
 
 .score {
+
+    display: inline-block;
+
     font-size: 22px;
 
     font-weight: bold;
+
+    margin: 5px;
 }
 
 
 .score-dash {
+
     opacity: 0.5;
 }
 
 
 .timer {
-    grid-column: 1 / -1;
 
-    margin-top: 5px;
+    margin-top: 4px;
 
     font-size: 22px;
 
-    color: #fff;
-
     text-shadow:
-        0 0 10px #fff;
+        0 0 10px white;
 }
 
 
@@ -304,7 +294,9 @@ body {
    ===================================================== */
 
 #arena {
-    width: min(1100px, 96vw);
+
+    width:
+        min(1100px, 96vw);
 
     height: 520px;
 
@@ -317,9 +309,9 @@ body {
     background:
         linear-gradient(
             180deg,
-            #111126 0%,
+            #111126,
             #0c0c19 70%,
-            #080812 100%
+            #080812
         );
 
     border:
@@ -334,11 +326,8 @@ body {
 }
 
 
-/* =====================================================
-   GRID
-   ===================================================== */
-
 .arena-grid {
+
     position: absolute;
 
     inset: 0;
@@ -346,17 +335,20 @@ body {
     opacity: 0.2;
 
     background-image:
+
         linear-gradient(
             rgba(0,234,255,0.2) 1px,
             transparent 1px
         ),
+
         linear-gradient(
             90deg,
             rgba(0,234,255,0.2) 1px,
             transparent 1px
         );
 
-    background-size: 40px 40px;
+    background-size:
+        40px 40px;
 
     transform:
         perspective(300px)
@@ -377,6 +369,7 @@ body {
    ===================================================== */
 
 .floor {
+
     position: absolute;
 
     left: 0;
@@ -398,7 +391,8 @@ body {
         4px solid #00eaff;
 
     box-shadow:
-        0 -5px 20px rgba(0,234,255,0.4);
+        0 -5px 20px
+        rgba(0,234,255,0.4);
 
     z-index: 3;
 
@@ -410,7 +404,49 @@ body {
    PLATFORMS
    ===================================================== */
 
+/*
+   FLOOR TOP
+   = 70px
+
+
+   LOW PLATFORM
+
+   bottom = 125px
+   height = 16px
+
+   top/support = 141px
+
+
+   CENTRE PLATFORM
+
+   bottom = 210px
+   height = 16px
+
+   top/support = 226px
+
+
+   HIGH PLATFORMS
+
+   bottom = 290px
+   height = 16px
+
+   top/support = 306px
+
+
+   This creates:
+
+   FLOOR -> LOW
+   LOW -> CENTRE
+   CENTRE -> HIGH
+
+   while the jump is too short for:
+
+   FLOOR -> CENTRE
+   LOW -> HIGH
+*/
+
 .platform {
+
     position: absolute;
 
     height: 16px;
@@ -429,7 +465,8 @@ body {
         8px 8px 3px 3px;
 
     box-shadow:
-        0 0 15px rgba(0,234,255,0.7);
+        0 0 15px
+        rgba(0,234,255,0.7);
 
     z-index: 4;
 
@@ -437,50 +474,66 @@ body {
 }
 
 
+/* LOW LEFT */
+
 .platform-left-low {
+
     width: 180px;
 
     left: 8%;
 
-    bottom: 110px;
+    bottom: 125px;
 }
 
 
+/* LOW RIGHT */
+
 .platform-right-low {
+
     width: 180px;
 
     right: 8%;
 
-    bottom: 110px;
+    bottom: 125px;
 }
 
 
+/* CENTRE */
+
 .platform-center {
+
     width: 190px;
 
     left: 50%;
 
-    transform: translateX(-50%);
+    transform:
+        translateX(-50%);
 
-    bottom: 165px;
+    bottom: 210px;
 }
 
 
+/* HIGH LEFT */
+
 .platform-left-high {
+
     width: 165px;
 
     left: 18%;
 
-    bottom: 215px;
+    bottom: 290px;
 }
 
 
+/* HIGH RIGHT */
+
 .platform-right-high {
+
     width: 165px;
 
     right: 18%;
 
-    bottom: 215px;
+    bottom: 290px;
 }
 
 
@@ -488,10 +541,27 @@ body {
    FIGHTERS
    ===================================================== */
 
-.fighter {
-    width: 55px;
+/*
+   The complete visual fighter is exactly 120px tall.
 
-    height: 110px;
+   Head:
+   0 -> 32
+
+   Body:
+   31 -> 79
+
+   Legs:
+   75 -> 120
+
+   Therefore the bottom of the legs is exactly
+   the bottom of the fighter container.
+*/
+
+.fighter {
+
+    width: 43px;
+
+    height: 120px;
 
     position: absolute;
 
@@ -501,22 +571,30 @@ body {
 
     pointer-events: none;
 
-    transform-origin: center bottom;
-
-    filter:
-        drop-shadow(
-            0 0 12px currentColor
-        );
+    transform-origin:
+        center bottom;
 }
 
 
 .player {
+
     color: #00eaff;
+
+    filter:
+        drop-shadow(
+            0 0 10px #00eaff
+        );
 }
 
 
 .cpu {
+
     color: #ff335f;
+
+    filter:
+        drop-shadow(
+            0 0 10px #ff335f
+        );
 }
 
 
@@ -525,26 +603,26 @@ body {
    ===================================================== */
 
 .fighter-head {
+
     position: absolute;
 
-    width: 43px;
+    width: 32px;
 
-    height: 43px;
+    height: 32px;
 
-    left: 6px;
+    left: 5.5px;
 
     top: 0;
 
     border-radius: 50%;
 
-    background:
-        #eeeeee;
+    background: #eee;
 
     border:
-        3px solid white;
+        2px solid white;
 
     box-shadow:
-        0 0 12px currentColor;
+        0 0 10px currentColor;
 }
 
 
@@ -553,27 +631,26 @@ body {
    ===================================================== */
 
 .fighter-body {
+
     position: absolute;
 
-    width: 49px;
+    width: 38px;
 
-    height: 63px;
+    height: 48px;
 
-    left: 3px;
+    left: 2.5px;
 
-    top: 42px;
+    top: 31px;
 
-    border-radius:
-        10px;
+    border-radius: 8px;
 
-    background:
-        currentColor;
+    background: currentColor;
 
     border:
         2px solid white;
 
     box-shadow:
-        0 0 18px currentColor;
+        0 0 14px currentColor;
 }
 
 
@@ -582,19 +659,18 @@ body {
    ===================================================== */
 
 .fighter-arm {
+
     position: absolute;
 
-    width: 19px;
+    width: 14px;
 
-    height: 60px;
+    height: 44px;
 
-    top: 46px;
+    top: 35px;
 
-    background:
-        #bcbcbc;
+    background: #aaa;
 
-    border-radius:
-        15px;
+    border-radius: 12px;
 
     z-index: -1;
 
@@ -604,7 +680,8 @@ body {
 
 
 .fighter-arm-left {
-    left: -13px;
+
+    left: -10px;
 
     transform:
         rotate(20deg);
@@ -612,7 +689,8 @@ body {
 
 
 .fighter-arm-right {
-    right: -13px;
+
+    right: -10px;
 
     transform:
         rotate(-20deg);
@@ -624,19 +702,18 @@ body {
    ===================================================== */
 
 .fighter-leg {
+
     position: absolute;
 
-    width: 20px;
+    width: 15px;
 
-    height: 60px;
+    height: 45px;
 
-    top: 95px;
+    top: 75px;
 
-    background:
-        #999999;
+    background: #999;
 
-    border-radius:
-        12px;
+    border-radius: 10px;
 
     z-index: -1;
 
@@ -646,18 +723,20 @@ body {
 
 
 .fighter-leg-left {
-    left: 8px;
+
+    left: 7px;
 
     transform:
-        rotate(8deg);
+        rotate(7deg);
 }
 
 
 .fighter-leg-right {
-    right: 8px;
+
+    right: 7px;
 
     transform:
-        rotate(-8deg);
+        rotate(-7deg);
 }
 
 
@@ -666,26 +745,30 @@ body {
    ===================================================== */
 
 .fighter.punch .fighter-arm-right {
+
     transform:
         rotate(-75deg)
-        translateX(25px);
+        translateX(20px);
 }
 
 
 .fighter.kick .fighter-leg-right {
+
     transform:
         rotate(-65deg)
-        translateX(25px);
+        translateX(20px);
 }
 
 
 .fighter.blocking .fighter-arm-left {
+
     transform:
         rotate(-65deg);
 }
 
 
 .fighter.blocking .fighter-arm-right {
+
     transform:
         rotate(65deg);
 }
@@ -696,16 +779,10 @@ body {
    ===================================================== */
 
 .hit-effect {
+
     position: absolute;
 
-    left: 50%;
-
-    bottom: 250px;
-
-    transform:
-        translate(-50%, 10px);
-
-    font-size: 25px;
+    font-size: 23px;
 
     font-weight: bold;
 
@@ -718,6 +795,7 @@ body {
 
 
 .hit-effect.show {
+
     animation:
         hitPop 0.4s ease;
 }
@@ -726,41 +804,45 @@ body {
 @keyframes hitPop {
 
     0% {
+
         opacity: 0;
 
         transform:
-            translate(-50%, 15px)
+            translateY(10px)
             scale(0.7);
     }
 
     40% {
+
         opacity: 1;
 
         transform:
-            translate(-50%, 0)
+            translateY(0)
             scale(1.15);
     }
 
     100% {
+
         opacity: 0;
 
         transform:
-            translate(-50%, -25px)
+            translateY(-25px)
             scale(1);
     }
 }
 
 
 /* =====================================================
-   BLOCK COUNTDOWN
+   BLOCK TIMER
    ===================================================== */
 
 .block-indicator {
-    position: fixed;
 
-    top: 18px;
+    position: absolute;
 
-    right: 20px;
+    top: 15px;
+
+    right: 15px;
 
     width: 55px;
 
@@ -768,9 +850,9 @@ body {
 
     display: flex;
 
-    align-items: center;
-
     justify-content: center;
+
+    align-items: center;
 
     border:
         2px solid #00eaff;
@@ -800,6 +882,7 @@ body {
 
 
 .block-indicator.show {
+
     opacity: 1;
 
     visibility: visible;
@@ -811,13 +894,17 @@ body {
    ===================================================== */
 
 .controls {
-    width: min(1100px, 96vw);
 
-    margin: 18px auto 30px;
+    width:
+        min(1100px, 96vw);
+
+    margin:
+        18px auto 30px;
 
     display: flex;
 
-    justify-content: space-between;
+    justify-content:
+        space-between;
 
     align-items: center;
 
@@ -830,6 +917,7 @@ body {
 
 
 .control-group h3 {
+
     font-size: 13px;
 
     letter-spacing: 2px;
@@ -841,6 +929,7 @@ body {
 
 
 .control-row {
+
     display: inline-flex;
 
     align-items: center;
@@ -856,15 +945,16 @@ body {
 
 
 .key {
-    padding: 4px 7px;
+
+    padding:
+        4px 7px;
 
     border:
         1px solid #444;
 
     border-radius: 5px;
 
-    background:
-        #171727;
+    background: #171727;
 
     color: white;
 
@@ -877,13 +967,15 @@ body {
    ===================================================== */
 
 .game-buttons {
+
     display: flex;
 
     gap: 10px;
 
     flex-wrap: wrap;
 
-    justify-content: flex-end;
+    justify-content:
+        flex-end;
 
     position: relative;
 
@@ -892,15 +984,16 @@ body {
 
 
 .main-button {
-    padding: 11px 17px;
+
+    padding:
+        11px 17px;
 
     border:
         1px solid #00eaff;
 
     border-radius: 8px;
 
-    background:
-        #11152b;
+    background: #11152b;
 
     color: #00eaff;
 
@@ -911,18 +1004,14 @@ body {
     position: relative;
 
     z-index: 101;
-
-    transition:
-        0.2s ease;
 }
 
 
 .main-button:hover {
-    background:
-        #00eaff;
 
-    color:
-        #07101a;
+    background: #00eaff;
+
+    color: #07101a;
 
     box-shadow:
         0 0 15px #00eaff;
@@ -930,24 +1019,19 @@ body {
 
 
 .main-button:active {
+
     transform:
         scale(0.96);
 }
 
 
 /* =====================================================
-   RESULT OVERLAY
+   RESULT
    ===================================================== */
 
-/*
-   VERY IMPORTANT:
-   The hidden overlay has pointer-events:none.
-
-   Therefore it CANNOT block any buttons.
-*/
-
 .result-overlay {
-    position: fixed;
+
+    position: absolute;
 
     inset: 0;
 
@@ -970,13 +1054,11 @@ body {
     visibility: hidden;
 
     pointer-events: none;
-
-    transition:
-        opacity 0.25s ease;
 }
 
 
 .result-overlay.show {
+
     opacity: 1;
 
     visibility: visible;
@@ -986,7 +1068,9 @@ body {
 
 
 .result-box {
-    width: min(500px, 90vw);
+
+    width:
+        min(500px, 90vw);
 
     padding: 40px;
 
@@ -1009,11 +1093,13 @@ body {
         );
 
     box-shadow:
-        0 0 50px rgba(0,234,255,0.3);
+        0 0 50px
+        rgba(0,234,255,0.3);
 }
 
 
 .result-box h2 {
+
     font-size: 48px;
 
     color: #00eaff;
@@ -1026,6 +1112,7 @@ body {
 
 
 .result-score {
+
     font-size: 40px;
 
     font-weight: bold;
@@ -1035,6 +1122,7 @@ body {
 
 
 .result-box p {
+
     color: #aaa;
 
     margin-bottom: 25px;
@@ -1046,6 +1134,7 @@ body {
    ===================================================== */
 
 .confetti {
+
     position: absolute;
 
     inset: 0;
@@ -1057,6 +1146,7 @@ body {
 
 
 .confetti-piece {
+
     position: absolute;
 
     top: -20px;
@@ -1065,25 +1155,28 @@ body {
 
     height: 14px;
 
-    background:
-        #00eaff;
+    background: #00eaff;
 
     animation:
-        confettiFall 2.5s linear forwards;
+        confettiFall 2.5s
+        linear forwards;
 }
 
 
 .confetti-piece:nth-child(3n) {
+
     background: #ff335f;
 }
 
 
 .confetti-piece:nth-child(3n + 1) {
-    background: #fff;
+
+    background: white;
 }
 
 
 .confetti-piece:nth-child(4n) {
+
     background: #ffe600;
 }
 
@@ -1091,12 +1184,14 @@ body {
 @keyframes confettiFall {
 
     0% {
+
         top: -20px;
 
         opacity: 1;
     }
 
     100% {
+
         top: 110%;
 
         opacity: 0;
@@ -1111,13 +1206,8 @@ body {
    FULLSCREEN
    ===================================================== */
 
-:fullscreen {
-    background:
-        #080812;
-}
+#arena:fullscreen {
 
-
-:fullscreen #arena {
     width: 100vw;
 
     height: 100vh;
@@ -1126,20 +1216,17 @@ body {
 
     margin: 0;
 
-    border-radius: 0;
-
     border: none;
+
+    border-radius: 0;
 }
 
 
-:fullscreen .block-indicator {
-    display: flex;
+#arena:fullscreen
+.platform-center {
 
-    position: fixed;
-
-    top: 20px;
-
-    right: 20px;
+    transform:
+        translateX(-50%);
 }
 
 
@@ -1150,45 +1237,38 @@ body {
 @media (max-width: 750px) {
 
     .topbar {
-        flex-direction: column;
 
-        text-align: center;
+        flex-direction:
+            column;
+
+        text-align:
+            center;
     }
 
 
     .hud {
+
         grid-template-columns:
-            1fr
-            100px
-            1fr;
+            1fr 90px 1fr;
 
         gap: 8px;
     }
 
 
     .controls {
-        flex-direction: column;
 
-        align-items: stretch;
+        flex-direction:
+            column;
+
+        align-items:
+            stretch;
     }
 
 
     .game-buttons {
-        justify-content: center;
+
+        justify-content:
+            center;
     }
 
-
-    .control-row {
-        margin-bottom: 5px;
-    }
-
-
-    .platform-left-high {
-        left: 10%;
-    }
-
-
-    .platform-right-high {
-        right: 10%;
-    }
 }
